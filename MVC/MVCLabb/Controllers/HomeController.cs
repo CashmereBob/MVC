@@ -25,5 +25,10 @@ namespace MVCLabb.Controllers
         {
             return View();
         }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
     }
 }
