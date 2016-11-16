@@ -13,11 +13,25 @@ namespace MVCLabb
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            
+
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                 "Default", // Route name
+                 "{controller}/{action}/{id}", // URL with parameters
+                    new { controller = "Home", action = "Index", id = UrlParameter.Optional }, // Parameter defaults
+                    new string[] { "MVCLabb.Controllers" }
+                    );
+
+            routes.MapRoute(
+                 "Admin",
+                 "admin/",
+                  new { controller = "Home", action = "Index", id = UrlParameter.Optional }, // Parameter defaults
+                    new string[] { "MVCLabb.Areas.Admin.Controllers" }
+                    );
+
+
+
+
         }
     }
 }
