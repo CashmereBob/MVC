@@ -94,34 +94,8 @@ namespace MVCLabb.Controllers
             }
         }
 
-        // GET: Photo/Delete/5
-        public ActionResult Delete(PhotoModel photo)
-        {
-            
-            return View(photoes.Where(x => x.id == photo.id).FirstOrDefault());
-        }
+       
 
-        // POST: Photo/Delete/5
-        [HttpPost]
-        public ActionResult Delete(PhotoModel photo, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                string fullPath = Request.MapPath(photoes.Where(x => x.id == photo.id).FirstOrDefault().path);
-                if (System.IO.File.Exists(fullPath))
-                {
-                    System.IO.File.Delete(fullPath);
-                    photoes.Remove(photoes.Where(x => x.id == photo.id).FirstOrDefault());
-                }
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }
