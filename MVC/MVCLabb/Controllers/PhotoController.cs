@@ -11,21 +11,10 @@ namespace MVCLabb.Controllers
     public class PhotoController : Controller
     {
         public static IList<PhotoModel> photoes = new List<PhotoModel>();
+
         // GET: Photo
         public ActionResult Index()
         {
-            if (photoes.Count() < 1)
-            {
-                var photoDir = Directory.GetFiles(Server.MapPath("~/Photos"));
-                
-                foreach (var photo in photoDir)
-                {
-                    var info = new FileInfo(photo);
-
-                    photoes.Add(new PhotoModel { name = info.Name, id = Guid.NewGuid(), path = $" /Photos/{info.Name}", description = "nn"});
-                }
-            }
-
 
             return View(photoes);
         }
