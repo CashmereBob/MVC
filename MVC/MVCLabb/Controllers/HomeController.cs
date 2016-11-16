@@ -11,6 +11,13 @@ namespace MVCLabb.Controllers
         // GET: Home
         public ActionResult Index()
         {
+            
+            
+            if (PhotoController.photoes != null)
+            {
+                return View(PhotoController.photoes.Skip(Math.Max(0, PhotoController.photoes.Count() - 3)));
+            }
+
             return View();
         }
 

@@ -1,7 +1,21 @@
-﻿
+﻿@model IEnumerable<MVCLabb.Models.PhotoModel>
+
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
 
+
+@section LatestUpload {
+    <div class="row">
+        <h3>Latest upload</h3>
+
+        @foreach (var item in Model)
+        {
+            @Html.Partial("_Thumbnails", item)
+        }
+
+    </div>
+    <hr />
+}

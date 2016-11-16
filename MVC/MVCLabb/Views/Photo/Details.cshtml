@@ -1,0 +1,59 @@
+﻿@model MVCLabb.Models.PhotoModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+
+
+
+<div class="row" style="padding: 20px;">
+    <div class="col-sm-12 col-md-6">
+        <img src="@Html.DisplayFor(model => model.path)" class="img-thumbnail" style="max-width: 100%;" />
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <h2>Details</h2>
+        <h4>@Html.DisplayFor(model => model.name)</h4>
+        <p>@Html.DisplayFor(model => model.description)</p>
+        <hr />
+        <h2>Comments</h2>
+        
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="text" name="name" class="form-control" placeholder="Name" />
+                <input type="email" name="email" class="form-control" placeholder="Email" />
+                <textarea name="comment" class="form-control" style="width: 100%;" rows="5"></textarea>
+                <input type="submit" value="Submit" class="btn btn-default" />
+            }
+
+            <hr />
+
+            @if (Model.comments.Count() < 1)
+            {
+                <h4>No comments</h4>
+            }
+            else
+            {
+                foreach (var comment in Model.comments)
+                {
+                    <h4>@comment.name</h4>
+                    <p>@comment.comment</p>
+                    <a href="mailto:@comment.email">@comment.email</a>
+
+                    <hr />
+
+                }
+            }
+        
+    </div>
+</div>
+
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

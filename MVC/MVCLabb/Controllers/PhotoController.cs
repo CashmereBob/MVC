@@ -10,7 +10,7 @@ namespace MVCLabb.Controllers
 {
     public class PhotoController : Controller
     {
-        private static IList<PhotoModel> photoes = new List<PhotoModel>();
+        public static IList<PhotoModel> photoes = new List<PhotoModel>();
         // GET: Photo
         public ActionResult Index()
         {
@@ -22,7 +22,7 @@ namespace MVCLabb.Controllers
                 {
                     var info = new FileInfo(photo);
 
-                    photoes.Add(new PhotoModel { name = info.Name, id = Guid.NewGuid(), path = $" /Photos/{info.Name}" });
+                    photoes.Add(new PhotoModel { name = info.Name, id = Guid.NewGuid(), path = $" /Photos/{info.Name}", description = "nn"});
                 }
             }
 
@@ -31,9 +31,19 @@ namespace MVCLabb.Controllers
         }
 
         // GET: Photo/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(PhotoModel photo)
         {
-            return View();
+            return View(photoes.Where(x => x.id == photo.id).FirstOrDefault());
+        }
+
+        [HttpPost]
+        public ActionResult Details(PhotoModel photo, FormCollection collection)
+        {
+            var photoToUpdate = photoes.Where(x => x.id == photo.id).FirstOrDefault();
+
+            photoToUpdate.comments.Add(new CommentModel {id = Guid.NewGuid(), name = collection["name"], email = collection["email"], comment = collection["comment"] });
+
+            return View(photoToUpdate);
         }
 
         // GET: Photo/Create

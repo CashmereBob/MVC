@@ -1,10 +1,13 @@
 ﻿$(window).load(function () {
     whileOverfloed();
+
 });
 
-$(document).resize(function () {
+
+$(window).resize(function () {
     whileOverfloed();
 });
+
 
 function isOverflowed() {
     var overflow = false;
@@ -17,7 +20,8 @@ function isOverflowed() {
 }
 function whileOverfloed() {
 
-    $('#masonarycontainer').height(500);
+    console.log("hepp");
+    $('#masonarycontainer').height(1);
     while (isOverflowed() === true) {
         $('#masonarycontainer').height($('#masonarycontainer').height() + 50);
     }
