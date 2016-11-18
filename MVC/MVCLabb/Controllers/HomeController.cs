@@ -9,23 +9,17 @@ namespace MVCLabb.Controllers
     public class HomeController : Controller
     {
         // GET: Home
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            
-            
-            if (PhotoController.photoes != null)
-            {
-                return View(PhotoController.photoes.Skip(Math.Max(0, PhotoController.photoes.Count() - 3)));
-            }
-
-            return View();
+            return View(PhotoController.GetAllPhotosFromDb().Skip(Math.Max(0, PhotoController.GetAllPhotosFromDb().Count() - 3)));
         }
-
+        [AllowAnonymous]
         public ActionResult Information()
         {
             return View();
         }
-
+        [AllowAnonymous]
         public ActionResult Error()
         {
             return View();

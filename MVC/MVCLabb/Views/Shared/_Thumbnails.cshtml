@@ -1,8 +1,8 @@
-﻿@model MVCLabb.Models.PhotoModel
+﻿@model MVCLabb.Models.IndexPhotoViewModel
 
 <div class="col-xs-12 col-sm-6 col-md-4 masonaryitem">
-    <a href="@string.Format($"/Photo/Details/{@Html.DisplayFor(modelItem => Model.id)}")" class="thumbnail">
-        <img src="@Html.DisplayFor(modelItem => Model.path)" alt="@Html.DisplayFor(modelItem => Model.name)">
+    <a href="@string.Format($"/Photo/Details/{Model.Id}")" class="thumbnail">
+        <img src="@Model.Path" alt="@Model.Name">
     </a>
 
 </div>

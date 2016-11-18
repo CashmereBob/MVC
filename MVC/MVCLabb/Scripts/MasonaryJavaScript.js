@@ -1,10 +1,12 @@
 ﻿$(window).load(function () {
+    console.log($('#masonarycontainer').height());
     whileOverfloed();
 
 });
 
 
 $(window).resize(function () {
+    console.log($('#masonarycontainer').height());
     whileOverfloed();
 });
 
@@ -20,10 +22,10 @@ function isOverflowed() {
 }
 function whileOverfloed() {
 
-    console.log("hepp");
-    $('#masonarycontainer').height(1);
+    $('#masonarycontainer').height("80vh");
     while (isOverflowed() === true) {
         $('#masonarycontainer').height($('#masonarycontainer').height() + 50);
     }
 
+    console.log($('#masonarycontainer').height());
 }

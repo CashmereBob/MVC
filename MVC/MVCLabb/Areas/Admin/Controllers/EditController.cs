@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MVCLabb.Models;
+using MVCLabb.Areas.Admin.Models;
 using MVCLabb.Controllers;
 using System.IO;
+using MVCLabb.Models;
 
 namespace MVCLabb.Areas.Admin.Controllers
 {
@@ -15,12 +16,24 @@ namespace MVCLabb.Areas.Admin.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            if (PhotoController.photoes != null)
+            using (var ctx = new MVCLabbEntities())
             {
-                return View(PhotoController.photoes);
+                IList<IndexPhotoViewModels> model = new List<IndexPhotoViewModels>();
+
+                ctx.tbl_Photo.ToList().ForEach(x =>
+                model.Add(new IndexPhotoViewModels {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Path = x.Path,
+                    Comments = x.tbl_Comment.Count()
+                })
+                
+                );
+
+                return View(model);
             }
 
-            return View();
         }
 
 
@@ -34,16 +47,22 @@ namespace MVCLabb.Areas.Admin.Controllers
         // POST: Admin/Edit/Create
         [Authorize]
         [HttpPost]
-        public ActionResult Create(PhotoModel photo, HttpPostedFileBase photoUpload)
+        public ActionResult Create(CreatePhotoViewModels photo, HttpPostedFileBase photoUpload)
         {
             try
             {
-                // TODO: Add insert logic here
+                using (var ctx = new MVCLabbEntities())
+                {
+                    ctx.tbl_Photo.Add(new tbl_Photo {
+                        Name = photo.Name,
+                        Description = photo.Description,
+                        Path = $" /Photos/{photoUpload.FileName}"
+                    });
+
+                    ctx.SaveChanges();
+                }
 
                 photoUpload.SaveAs(Path.Combine(Server.MapPath("~/Photos"), photoUpload.FileName));
-
-                PhotoController.photoes.Add(new PhotoModel { name = photo.name, id = Guid.NewGuid(), path = $" /Photos/{photoUpload.FileName}" });
-
                 return RedirectToAction("Index");
             }
             catch
@@ -53,25 +72,44 @@ namespace MVCLabb.Areas.Admin.Controllers
         }
 
         // GET: Admin/Edit/Edit/5
-        public ActionResult Edit(PhotoModel photo)
+        public ActionResult Edit(EditPhotoViewModels photo)
         {
-            return View(PhotoController.photoes.Where(x => x.id == photo.id).FirstOrDefault());
+            using (var ctx = new MVCLabbEntities())
+            {
+                var photoFromDB = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+
+                photo.Name = photoFromDB.Name;
+                photo.Description = photoFromDB.Description;
+                photo.Path = photoFromDB.Path;
+
+                photoFromDB.tbl_Comment.ToList().ForEach(x =>
+                photo.Comments.Add(new CommentViewModel {
+                    id = x.Id,
+                    name = x.Name,
+                    email = x.Email,
+                    comment = x.Comment
+                }));
+
+                return View(photo);
+            }
+                
         }
 
         // POST: Admin/Edit/Edit/5
         [Authorize]
         [HttpPost]
-        public ActionResult Edit(PhotoModel photo, FormCollection collection)
+        public ActionResult Edit(EditPhotoViewModels photo, FormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
 
-                var updatePhoto = PhotoController.photoes.Where(x => x.id == photo.id).FirstOrDefault();
-
-                updatePhoto.name = photo.name;
-                updatePhoto.description = photo.description;
-
+                using (var ctx = new MVCLabbEntities())
+                {
+                    var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                    photoFromDb.Name = photo.Name;
+                    photoFromDb.Description = photo.Description;
+                    ctx.SaveChanges();
+                }
 
                 return RedirectToAction("Index");
             }
@@ -81,27 +119,64 @@ namespace MVCLabb.Areas.Admin.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult EditComment(string id)
+        {
+            var photo = new EditPhotoViewModels();
+            using (var ctx = new MVCLabbEntities())
+            {
+                
+                ctx.tbl_Photo.FirstOrDefault(x => x.Id.ToString() == id).tbl_Comment.ToList().ForEach(x =>
+                photo.Comments.Add(new CommentViewModel {
+                    name = x.Name,
+                    id = x.Id,
+                    comment = x.Comment,
+                    email = x.Email
+                }));
+            }
+
+
+                return View(photo.Comments);
+        }
+
+
         // GET: Admin/Edit/Delete/5
         [Authorize]
-        public ActionResult Delete(PhotoModel photo)
+        public ActionResult Delete(DeletePhotoViewModels photo)
         {
-            return View(PhotoController.photoes.Where(x => x.id == photo.id).FirstOrDefault());
+            using (var ctx = new MVCLabbEntities())
+            {
+                var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                photo.Name = photoFromDb.Name;
+                photo.Description = photoFromDb.Description;
+                photo.Path = photoFromDb.Path;
+
+                return View(photo);
+            }
         }
 
         // POST: Admin/Edit/Delete/5
         [Authorize]
         [HttpPost]
-        public ActionResult Delete(PhotoModel photo, FormCollection collection)
+        public ActionResult Delete(DeletePhotoViewModels photo, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                string fullPath = Request.MapPath(PhotoController.photoes.Where(x => x.id == photo.id).FirstOrDefault().path);
-                if (System.IO.File.Exists(fullPath))
+                using (var ctx = new MVCLabbEntities())
                 {
-                    System.IO.File.Delete(fullPath);
-                    PhotoController.photoes.Remove(PhotoController.photoes.Where(x => x.id == photo.id).FirstOrDefault());
+                    var photoToDelete = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                    ctx.tbl_Photo.Remove(photoToDelete);
+
+                    ctx.SaveChanges();
+
+                    string fullPath = Request.MapPath(photoToDelete.Path);
+
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+
                 }
 
                 return RedirectToAction("Index");

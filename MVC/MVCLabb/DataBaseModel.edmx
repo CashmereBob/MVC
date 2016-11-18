@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MVCLabbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Photo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Photo_Comment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+            <PropertyRef Name="PhotoId" />
+          </Key>
+          <Property Name="CommentId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PhotoId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tbl_Photo_Comment_tbl_Comment">
+          <End Role="tbl_Comment" Type="Self.tbl_Comment" Multiplicity="1" />
+          <End Role="tbl_Photo_Comment" Type="Self.tbl_Photo_Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Comment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Photo_Comment">
+              <PropertyRef Name="CommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Photo_Comment_tbl_Photo">
+          <End Role="tbl_Photo" Type="Self.tbl_Photo" Multiplicity="1" />
+          <End Role="tbl_Photo_Comment" Type="Self.tbl_Photo_Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Photo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Photo_Comment">
+              <PropertyRef Name="PhotoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MVCLabbModelStoreContainer">
+          <EntitySet Name="tbl_Comment" EntityType="Self.tbl_Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Photo" EntityType="Self.tbl_Photo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Photo_Comment" EntityType="Self.tbl_Photo_Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_User" EntityType="Self.tbl_User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_Photo_Comment_tbl_Comment" Association="Self.FK_tbl_Photo_Comment_tbl_Comment">
+            <End Role="tbl_Comment" EntitySet="tbl_Comment" />
+            <End Role="tbl_Photo_Comment" EntitySet="tbl_Photo_Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Photo_Comment_tbl_Photo" Association="Self.FK_tbl_Photo_Comment_tbl_Photo">
+            <End Role="tbl_Photo" EntitySet="tbl_Photo" />
+            <End Role="tbl_Photo_Comment" EntitySet="tbl_Photo_Comment" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MVCLabbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tbl_Photo" Relationship="Self.tbl_Photo_Comment" FromRole="tbl_Comment" ToRole="tbl_Photo" />
+        </EntityType>
+        <EntityType Name="tbl_Photo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tbl_Comment" Relationship="Self.tbl_Photo_Comment" FromRole="tbl_Photo" ToRole="tbl_Comment" />
+        </EntityType>
+        <EntityType Name="tbl_User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="tbl_Photo_Comment">
+          <End Role="tbl_Comment" Type="Self.tbl_Comment" Multiplicity="*" />
+          <End Role="tbl_Photo" Type="Self.tbl_Photo" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="MVCLabbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Comment" EntityType="Self.tbl_Comment" />
+          <EntitySet Name="tbl_Photo" EntityType="Self.tbl_Photo" />
+          <EntitySet Name="tbl_User" EntityType="Self.tbl_User" />
+          <AssociationSet Name="tbl_Photo_Comment" Association="Self.tbl_Photo_Comment">
+            <End Role="tbl_Comment" EntitySet="tbl_Comment" />
+            <End Role="tbl_Photo" EntitySet="tbl_Photo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MVCLabbModelStoreContainer" CdmEntityContainer="MVCLabbEntities">
+          <EntitySetMapping Name="tbl_Comment">
+            <EntityTypeMapping TypeName="MVCLabbModel.tbl_Comment">
+              <MappingFragment StoreEntitySet="tbl_Comment">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Photo">
+            <EntityTypeMapping TypeName="MVCLabbModel.tbl_Photo">
+              <MappingFragment StoreEntitySet="tbl_Photo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_User">
+            <EntityTypeMapping TypeName="MVCLabbModel.tbl_User">
+              <MappingFragment StoreEntitySet="tbl_User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="tbl_Photo_Comment" TypeName="MVCLabbModel.tbl_Photo_Comment" StoreEntitySet="tbl_Photo_Comment">
+            <EndProperty Name="tbl_Comment">
+              <ScalarProperty Name="Id" ColumnName="CommentId" />
+            </EndProperty>
+            <EndProperty Name="tbl_Photo">
+              <ScalarProperty Name="Id" ColumnName="PhotoId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

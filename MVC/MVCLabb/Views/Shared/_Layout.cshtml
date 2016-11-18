@@ -18,14 +18,28 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Mitt Galleri", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                
+               
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Information", "Information", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Galleri", "Index", "Photo", new { area = "" }, null)</li>
+
                 </ul>
-                @Html.Partial("_LoginPartial")
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Hello " + User.Identity.Name + "!", "Manage", "Auth", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("Manage Photos", "Index", "Edit", new { area = "Admin" }, null)</li>
+                        <li><a href="@Url.Action("Logout", "Auth")">Log out</a></li>
+                    }
+                    else
+                    {
+                        <li> @Html.ActionLink("Log In", "Login", "Auth", new { area = "" }, null)</li>
+                        <li> @Html.ActionLink("Register", "Registration", "Auth", new { area = "" }, null)</li>
+                    }
+                </ul>
+
             </div>
         </div>
     </div>
@@ -38,7 +52,7 @@
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
-    
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     @RenderSection("Scripts", false)

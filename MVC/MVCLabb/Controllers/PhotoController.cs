@@ -10,81 +10,89 @@ namespace MVCLabb.Controllers
 {
     public class PhotoController : Controller
     {
-        public static IList<PhotoModel> photoes = new List<PhotoModel>();
+
 
         // GET: Photo
+        [AllowAnonymous]
         public ActionResult Index()
         {
+            
+                return View(GetAllPhotosFromDb());
+            
 
-            return View(photoes);
+        }
+
+        public static List<IndexPhotoViewModel> GetAllPhotosFromDb()
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                var model = new List<IndexPhotoViewModel>();
+                ctx.tbl_Photo.ToList().ForEach(x =>
+                model.Add(new IndexPhotoViewModel
+                {
+                    Id = x.Id,
+                    Path = x.Path,
+                    Name = x.Name
+                }));
+
+                return model;
+            }
         }
 
         // GET: Photo/Details/5
-        public ActionResult Details(PhotoModel photo)
+        [AllowAnonymous]
+        public ActionResult Details(DetailsPhotoViewModel photo)
         {
-            return View(photoes.Where(x => x.id == photo.id).FirstOrDefault());
+            
+            return View(GetPhotoFromDb(photo));
         }
 
         [HttpPost]
-        public ActionResult Details(PhotoModel photo, FormCollection collection)
+        [AllowAnonymous]
+        public ActionResult Details(DetailsPhotoViewModel photo, FormCollection collection)
         {
-            var photoToUpdate = photoes.Where(x => x.id == photo.id).FirstOrDefault();
 
-            photoToUpdate.comments.Add(new CommentModel {id = Guid.NewGuid(), name = collection["name"], email = collection["email"], comment = collection["comment"] });
-
-            return View(photoToUpdate);
-        }
-
-        // GET: Photo/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Photo/Create
-        [HttpPost]
-        public ActionResult Create(PhotoModel photo, HttpPostedFileBase photoUpload)
-        {
-            try
+            using (var ctx = new MVCLabbEntities())
             {
-                // TODO: Add insert logic here
+                var photoToUpdate = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                photoToUpdate.tbl_Comment.Add(new tbl_Comment
+                {
+                    Name = collection["name"],
+                    Email = collection["email"],
+                    Comment = collection["comment"]
+                });
 
-                photoUpload.SaveAs(Path.Combine(Server.MapPath("~/Photos"), photoUpload.FileName));
-
-                photoes.Add(new PhotoModel { name = photo.name, id = Guid.NewGuid(), path = $" /Photos/{photoUpload.FileName}"});
-
-                return RedirectToAction("Index");
+                ctx.SaveChanges();
             }
-            catch
-            {
-                return View(photo);
-            }
+
+
+            return View(GetPhotoFromDb(photo));
         }
 
-        // GET: Photo/Edit/5
-        public ActionResult Edit(int id)
+
+        private DetailsPhotoViewModel GetPhotoFromDb(DetailsPhotoViewModel photo)
         {
-            return View();
+            using (var ctx = new MVCLabbEntities())
+            {
+                var photoFromDB = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                photo.Name = photoFromDB.Name;
+                photo.Description = photoFromDB.Description;
+                photo.Path = photoFromDB.Path;
+
+                photoFromDB.tbl_Comment.ToList().ForEach(x =>
+                photo.Comments.Add(new CommentViewModel
+                {
+                    id = x.Id,
+                    comment = x.Comment,
+                    email = x.Email,
+                    name = x.Name
+                }));
+
+                return photo;
+            }
+
+
         }
 
-        // POST: Photo/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-       
-
-        
     }
 }
