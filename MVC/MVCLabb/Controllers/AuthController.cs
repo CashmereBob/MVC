@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using MVCLabb.Models;
 using System.Security.Claims;
+using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Controllers
 {
@@ -15,7 +16,6 @@ namespace MVCLabb.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-
             return View();
         }
 
@@ -33,7 +33,7 @@ namespace MVCLabb.Controllers
 
                 foreach (var user in dbCtx.tbl_User)
                 {
-                    if (model.Email == user.Email && model.Password == user.Password)
+                    if (model.Email == user.Email && UserHelper.GenerateSHA256Hash(model.Password, user.Salt) == user.Password)
                     {
                         var identity = new ClaimsIdentity(new[] {
                         new Claim(ClaimTypes.Name, user.Name),
@@ -78,14 +78,20 @@ namespace MVCLabb.Controllers
         {
             if (ModelState.IsValid)
             {
+                var salt = UserHelper.CreateSalt(10);
+                var password = UserHelper.GenerateSHA256Hash(model.Password, salt);
+
+
                 using (var ctx = new MVCLabbEntities())
                 {
                     ctx.tbl_User.Add(new tbl_User
                     {
                         Id = Guid.NewGuid(),
                         Email = model.Email,
-                        Password = model.Password,
+                        Password = password,
+                        Salt = salt,
                         Country = "nn",
+                        Admin = false,
                         Name = model.Name
 
                     });
@@ -105,13 +111,11 @@ namespace MVCLabb.Controllers
         [HttpGet]
         public ActionResult Manage()
         {
-            var claims = User.Identity as ClaimsIdentity;
-            if (claims != null)
-            {
-                var userID = claims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                using (var ctx = new MVCLabbEntities())
-                {
-                    var user = ctx.tbl_User.FirstOrDefault(x => x.Id.ToString() == userID);
+
+
+            var user = UserHelper.GetLogedInUser();
+
+            if (user != null) { 
 
                     var model = new ManageViewModel
                     {
@@ -121,11 +125,9 @@ namespace MVCLabb.Controllers
                         Password = user.Password,
                         ConfirmPassword = user.Password
                     };
+
                     return View(model);
-                }
-
             }
-
 
             return View();
         }
@@ -135,13 +137,25 @@ namespace MVCLabb.Controllers
         {
             if (ModelState.IsValid)
             {
+                
+
                 using (var ctx = new MVCLabbEntities())
                 {
                     tbl_User user = ctx.tbl_User.Where(x => x.Email == model.Email).FirstOrDefault();
                     user.Name = model.Name;
                     user.Country = model.Country;
                     user.Email = model.Email;
-                    user.Password = model.Password;
+
+                    if (user.Password != model.Password)
+                    {
+                        var salt = UserHelper.CreateSalt(10);
+                        var password = UserHelper.GenerateSHA256Hash(model.Password, salt);
+
+                        user.Salt = salt;
+                        user.Password = password;
+
+                    }
+                    
                     ctx.SaveChanges();
                 }
 

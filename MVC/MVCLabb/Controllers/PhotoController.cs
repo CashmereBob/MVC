@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Controllers
 {
@@ -48,7 +49,7 @@ namespace MVCLabb.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         public ActionResult Details(DetailsPhotoViewModel photo, FormCollection collection)
         {
 
@@ -59,7 +60,8 @@ namespace MVCLabb.Controllers
                 {
                     Name = collection["name"],
                     Email = collection["email"],
-                    Comment = collection["comment"]
+                    Comment = collection["comment"],
+                    UserID = UserHelper.GetLogedInUser().Id
                 });
 
                 ctx.SaveChanges();

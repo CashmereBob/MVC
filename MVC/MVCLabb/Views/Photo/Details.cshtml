@@ -14,9 +14,12 @@
         <h4>@Html.DisplayFor(model => model.Name)</h4>
         <p>@Html.DisplayFor(model => model.Description)</p>
         <hr />
-        <h2>Comments</h2>
         
-            @using (Html.BeginForm())
+        <h2>Comments</h2>
+            @if (User.Identity.IsAuthenticated)
+            {
+
+            using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
 
@@ -26,8 +29,9 @@
                 <input type="submit" value="Submit" class="btn btn-default" />
             }
 
-            <hr />
-
+            
+            }
+        <hr />
             @if (Model.Comments.Count() < 1)
             {
                 <h4>No comments</h4>

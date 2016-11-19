@@ -13,6 +13,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_Photo">
           <Key>
@@ -22,6 +24,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Path" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_Photo_Comment">
           <Key>
@@ -40,7 +44,21 @@
           <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Admin" Type="bit" Nullable="false" />
+          <Property Name="Salt" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <Association Name="FK_tbl_Comment_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="tbl_Comment" Type="Self.tbl_Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Comment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbl_Photo_Comment_tbl_Comment">
           <End Role="tbl_Comment" Type="Self.tbl_Comment" Multiplicity="1" />
           <End Role="tbl_Photo_Comment" Type="Self.tbl_Photo_Comment" Multiplicity="*" />
@@ -65,11 +83,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tbl_Photo_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="tbl_Photo" Type="Self.tbl_Photo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Photo">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MVCLabbModelStoreContainer">
           <EntitySet Name="tbl_Comment" EntityType="Self.tbl_Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Photo" EntityType="Self.tbl_Photo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Photo_Comment" EntityType="Self.tbl_Photo_Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_User" EntityType="Self.tbl_User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_Comment_tbl_User" Association="Self.FK_tbl_Comment_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Comment" EntitySet="tbl_Comment" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbl_Photo_Comment_tbl_Comment" Association="Self.FK_tbl_Photo_Comment_tbl_Comment">
             <End Role="tbl_Comment" EntitySet="tbl_Comment" />
             <End Role="tbl_Photo_Comment" EntitySet="tbl_Photo_Comment" />
@@ -77,6 +111,10 @@
           <AssociationSet Name="FK_tbl_Photo_Comment_tbl_Photo" Association="Self.FK_tbl_Photo_Comment_tbl_Photo">
             <End Role="tbl_Photo" EntitySet="tbl_Photo" />
             <End Role="tbl_Photo_Comment" EntitySet="tbl_Photo_Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Photo_tbl_User" Association="Self.FK_tbl_Photo_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Photo" EntitySet="tbl_Photo" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -92,6 +130,9 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="tbl_Photo" Relationship="Self.tbl_Photo_Comment" FromRole="tbl_Comment" ToRole="tbl_Photo" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="tbl_User" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_User" FromRole="tbl_Comment" ToRole="tbl_User" />
         </EntityType>
         <EntityType Name="tbl_Photo">
           <Key>
@@ -102,6 +143,9 @@
           <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="tbl_Comment" Relationship="Self.tbl_Photo_Comment" FromRole="tbl_Photo" ToRole="tbl_Comment" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="tbl_User" Relationship="MVCLabbModel.FK_tbl_Photo_tbl_User" FromRole="tbl_Photo" ToRole="tbl_User" />
         </EntityType>
         <EntityType Name="tbl_User">
           <Key>
@@ -112,6 +156,10 @@
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Admin" Type="Boolean" Nullable="false" />
+          <Property Name="Salt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_Comment" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_User" FromRole="tbl_User" ToRole="tbl_Comment" />
+          <NavigationProperty Name="tbl_Photo" Relationship="MVCLabbModel.FK_tbl_Photo_tbl_User" FromRole="tbl_User" ToRole="tbl_Photo" />
         </EntityType>
         <Association Name="tbl_Photo_Comment">
           <End Role="tbl_Comment" Type="Self.tbl_Comment" Multiplicity="*" />
@@ -125,7 +173,39 @@
             <End Role="tbl_Comment" EntitySet="tbl_Comment" />
             <End Role="tbl_Photo" EntitySet="tbl_Photo" />
           </AssociationSet>
+          <AssociationSet Name="FK_tbl_Comment_tbl_User" Association="MVCLabbModel.FK_tbl_Comment_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Comment" EntitySet="tbl_Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Photo_tbl_User" Association="MVCLabbModel.FK_tbl_Photo_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Photo" EntitySet="tbl_Photo" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_tbl_Comment_tbl_User">
+          <End Type="MVCLabbModel.tbl_User" Role="tbl_User" Multiplicity="1" />
+          <End Type="MVCLabbModel.tbl_Comment" Role="tbl_Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Comment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Photo_tbl_User">
+          <End Type="MVCLabbModel.tbl_User" Role="tbl_User" Multiplicity="1" />
+          <End Type="MVCLabbModel.tbl_Photo" Role="tbl_Photo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Photo">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -135,6 +215,8 @@
           <EntitySetMapping Name="tbl_Comment">
             <EntityTypeMapping TypeName="MVCLabbModel.tbl_Comment">
               <MappingFragment StoreEntitySet="tbl_Comment">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -145,6 +227,8 @@
           <EntitySetMapping Name="tbl_Photo">
             <EntityTypeMapping TypeName="MVCLabbModel.tbl_Photo">
               <MappingFragment StoreEntitySet="tbl_Photo">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Path" ColumnName="Path" />
@@ -155,6 +239,8 @@
           <EntitySetMapping Name="tbl_User">
             <EntityTypeMapping TypeName="MVCLabbModel.tbl_User">
               <MappingFragment StoreEntitySet="tbl_User">
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Admin" ColumnName="Admin" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />

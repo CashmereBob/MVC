@@ -7,11 +7,14 @@ using MVCLabb.Areas.Admin.Models;
 using MVCLabb.Controllers;
 using System.IO;
 using MVCLabb.Models;
+using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Areas.Admin.Controllers
 {
     public class EditController : Controller
     {
+        Guid userID = UserHelper.GetLogedInUser().Id;
+
         // GET: Admin/Edit
         [Authorize]
         public ActionResult Index()
@@ -19,8 +22,9 @@ namespace MVCLabb.Areas.Admin.Controllers
             using (var ctx = new MVCLabbEntities())
             {
                 IList<IndexPhotoViewModels> model = new List<IndexPhotoViewModels>();
+                
 
-                ctx.tbl_Photo.ToList().ForEach(x =>
+                ctx.tbl_Photo.Where(x => x.UserID == userID).ToList().ForEach(x =>
                 model.Add(new IndexPhotoViewModels {
                     Id = x.Id,
                     Name = x.Name,
@@ -56,7 +60,8 @@ namespace MVCLabb.Areas.Admin.Controllers
                     ctx.tbl_Photo.Add(new tbl_Photo {
                         Name = photo.Name,
                         Description = photo.Description,
-                        Path = $" /Photos/{photoUpload.FileName}"
+                        Path = $" /Photos/{photoUpload.FileName}",
+                        UserID = UserHelper.GetLogedInUser().Id
                     });
 
                     ctx.SaveChanges();
@@ -76,7 +81,7 @@ namespace MVCLabb.Areas.Admin.Controllers
         {
             using (var ctx = new MVCLabbEntities())
             {
-                var photoFromDB = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                var photoFromDB = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
 
                 photo.Name = photoFromDB.Name;
                 photo.Description = photoFromDB.Description;
@@ -105,7 +110,7 @@ namespace MVCLabb.Areas.Admin.Controllers
 
                 using (var ctx = new MVCLabbEntities())
                 {
-                    var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                    var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
                     photoFromDb.Name = photo.Name;
                     photoFromDb.Description = photo.Description;
                     ctx.SaveChanges();
@@ -127,7 +132,7 @@ namespace MVCLabb.Areas.Admin.Controllers
             using (var ctx = new MVCLabbEntities())
             {
                 
-                ctx.tbl_Photo.FirstOrDefault(x => x.Id.ToString() == id).tbl_Comment.ToList().ForEach(x =>
+                ctx.tbl_Photo.FirstOrDefault(x => x.Id.ToString() == id && x.UserID == userID).tbl_Comment.ToList().ForEach(x =>
                 photo.Comments.Add(new CommentViewModel {
                     name = x.Name,
                     id = x.Id,
@@ -147,7 +152,7 @@ namespace MVCLabb.Areas.Admin.Controllers
         {
             using (var ctx = new MVCLabbEntities())
             {
-                var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
                 photo.Name = photoFromDb.Name;
                 photo.Description = photoFromDb.Description;
                 photo.Path = photoFromDb.Path;
@@ -165,7 +170,7 @@ namespace MVCLabb.Areas.Admin.Controllers
             {
                 using (var ctx = new MVCLabbEntities())
                 {
-                    var photoToDelete = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                    var photoToDelete = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
                     ctx.tbl_Photo.Remove(photoToDelete);
 
                     ctx.SaveChanges();

@@ -24,8 +24,11 @@ namespace MVCLabb
         public string Name { get; set; }
         public string Email { get; set; }
         public string Comment { get; set; }
+        public System.DateTime Date { get; set; }
+        public System.Guid UserID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Photo> tbl_Photo { get; set; }
+        public virtual tbl_User tbl_User { get; set; }
     }
 }

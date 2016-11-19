@@ -7,8 +7,10 @@
       <Diagram DiagramId="43aff11ce93e43a0960f7b0d7ff5f626" Name="Diagram1">
         <EntityTypeShape EntityType="MVCLabbModel.tbl_Comment" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MVCLabbModel.tbl_Photo" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVCLabbModel.tbl_User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_User" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
         <AssociationConnector Association="MVCLabbModel.tbl_Photo_Comment" ManuallyRouted="false" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_User" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

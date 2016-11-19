@@ -34,10 +34,10 @@ namespace MVCLabb.Areas.Admin.Models
     {
      
         public Guid Id { get; set; }
-        [Required]
+        
         public string Name { get; set; }
         public string Path { get; set; }
-        [Required]
+     
         public string Description { get; set; }
         public ICollection<CommentViewModel> Comments { get; set; }
 

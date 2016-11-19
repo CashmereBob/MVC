@@ -14,10 +14,24 @@ namespace MVCLabb
     
     public partial class tbl_User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tbl_User()
+        {
+            this.tbl_Comment = new HashSet<tbl_Comment>();
+            this.tbl_Photo = new HashSet<tbl_Photo>();
+        }
+    
         public System.Guid Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
+        public bool Admin { get; set; }
+        public string Salt { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Comment> tbl_Comment { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Photo> tbl_Photo { get; set; }
     }
 }
