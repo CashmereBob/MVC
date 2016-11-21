@@ -1,0 +1,23 @@
+﻿<ul class="nav navbar-nav navbar-right">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li>@Html.ActionLink("Hello " + User.Identity.Name + "!", "Manage", "Auth", new { area = "" }, null)</li>
+                        <li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                @Html.ActionLink("Manage Photos", "Index", "Edit", new { area = "Admin" }, null)
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Manage Photos", "Index", "Photo", new { area = "User" }, null)
+                            }
+
+                        </li>
+                        <li><a href="@Url.Action("Logout", "Auth", new {area = "" })">Log out</a></li>
+    }
+    else
+    {
+        <li> @Html.ActionLink("Log In", "Login", "Auth", new { area = "" }, null)</li>
+                        <li> @Html.ActionLink("Register", "Registration", "Auth", new { area = "" }, null)</li>
+    }
+</ul>

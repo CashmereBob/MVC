@@ -28,31 +28,14 @@ namespace MVCLabb.Controllers
                 return View(model);
             }
 
-            using (var dbCtx = new MVCLabbEntities())
+            if (UserHelper.LoginUser(model.Email, model.Password))
             {
-
-                foreach (var user in dbCtx.tbl_User)
-                {
-                    if (model.Email == user.Email && UserHelper.GenerateSHA256Hash(model.Password, user.Salt) == user.Password)
-                    {
-                        var identity = new ClaimsIdentity(new[] {
-                        new Claim(ClaimTypes.Name, user.Name),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                        },
-                            "ApplicationCookie");
-
-                        var ctx = Request.GetOwinContext();
-                        var authManager = ctx.Authentication;
-
-                        authManager.SignIn(identity);
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
+                    return RedirectToAction("Index", "Home", new { area = "" });
             }
+
             ModelState.AddModelError("", "Invalid email or passsword");
             return View(model);
+              
         }
 
         [HttpGet]

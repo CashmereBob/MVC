@@ -9,6 +9,9 @@ namespace MVCLabb.Models
     public class DetailsPhotoViewModel
     {
         public Guid Id { get; set; }
+        public DateTime Date { get; set; }
+        public string UploaderName { get; set; }
+        public string Album { get; set; }
         public string Path { get; set; }
         [Required]
         public string Name { get; set; }
@@ -31,5 +34,7 @@ namespace MVCLabb.Models
         public string Path { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Album { get; set; }
+
     }
 }

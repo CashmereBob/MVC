@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    @RenderSection("Css", false)
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
@@ -26,20 +27,7 @@
                     <li>@Html.ActionLink("Galleri", "Index", "Photo", new { area = "" }, null)</li>
 
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("Hello " + User.Identity.Name + "!", "Manage", "Auth", new { area = "" }, null)</li>
-                        <li>@Html.ActionLink("Manage Photos", "Index", "Edit", new { area = "Admin" }, null)</li>
-                        <li><a href="@Url.Action("Logout", "Auth")">Log out</a></li>
-                    }
-                    else
-                    {
-                        <li> @Html.ActionLink("Log In", "Login", "Auth", new { area = "" }, null)</li>
-                        <li> @Html.ActionLink("Register", "Registration", "Auth", new { area = "" }, null)</li>
-                    }
-                </ul>
-
+               @Html.Partial("_LoggedinMenu")
             </div>
         </div>
     </div>

@@ -183,6 +183,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\GalleryStyle.css" />
     <Content Include="Content\Site.css" />
     <Content Include="DataBaseModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -217,6 +218,17 @@
     <Content Include="Areas\Admin\Views\Edit\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\Edit\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Edit\EditComment.cshtml" />
+    <Content Include="Areas\User\Views\web.config" />
+    <Content Include="Areas\User\Views\Photo\Create.cshtml" />
+    <Content Include="Areas\User\Views\Photo\Delete.cshtml" />
+    <Content Include="Areas\User\Views\Photo\Edit.cshtml" />
+    <Content Include="Areas\User\Views\Comment\index.cshtml" />
+    <Content Include="Areas\User\Views\Photo\Index.cshtml" />
+    <Content Include="Areas\User\Views\Album\index.cshtml" />
+    <Content Include="Areas\User\Views\Album\Create.cshtml" />
+    <Content Include="Areas\User\Views\Album\Edit.cshtml" />
+    <Content Include="Areas\User\Views\Album\Delete.cshtml" />
+    <Content Include="Areas\User\Views\Comment\Delete.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -245,6 +257,12 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\EditController.cs" />
     <Compile Include="Areas\Admin\Models\PhotoViewModels.cs" />
+    <Compile Include="Areas\User\Controllers\AlbumController.cs" />
+    <Compile Include="Areas\User\Controllers\CommentController.cs" />
+    <Compile Include="Areas\User\Controllers\PhotoController.cs" />
+    <Compile Include="Areas\User\Models\AlbumViewModels.cs" />
+    <Compile Include="Areas\User\Models\PhotoViewModels.cs" />
+    <Compile Include="Areas\User\UserAreaRegistration.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
@@ -266,11 +284,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HelperMethods\PhotoHelper.cs" />
     <Compile Include="HelperMethods\UserHelper.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tbl_Album.cs">
+      <DependentUpon>DataBaseModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="tbl_Comment.cs">
       <DependentUpon>DataBaseModel.tt</DependentUpon>
     </Compile>
@@ -291,6 +313,7 @@
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Auth\Registration.cshtml" />
     <Content Include="Views\Auth\Manage.cshtml" />
+    <Content Include="Views\Shared\_LoggedinMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -301,6 +324,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\User\Views\Shared\" />
     <Folder Include="Photos\" />
   </ItemGroup>
   <ItemGroup>

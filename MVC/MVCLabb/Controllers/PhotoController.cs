@@ -58,10 +58,10 @@ namespace MVCLabb.Controllers
                 var photoToUpdate = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
                 photoToUpdate.tbl_Comment.Add(new tbl_Comment
                 {
-                    Name = collection["name"],
-                    Email = collection["email"],
+                    Date = DateTime.Now,
                     Comment = collection["comment"],
                     UserID = UserHelper.GetLogedInUser().Id
+                   
                 });
 
                 ctx.SaveChanges();
@@ -80,14 +80,18 @@ namespace MVCLabb.Controllers
                 photo.Name = photoFromDB.Name;
                 photo.Description = photoFromDB.Description;
                 photo.Path = photoFromDB.Path;
+                photo.Date = photoFromDB.Date;
+                photo.UploaderName = photoFromDB.tbl_User.Name;
+                photo.Album = photoFromDB.AlbumID != null ? photoFromDB.tbl_Album.Name : "Uncategorized";
 
                 photoFromDB.tbl_Comment.ToList().ForEach(x =>
                 photo.Comments.Add(new CommentViewModel
                 {
                     id = x.Id,
-                    comment = x.Comment,
-                    email = x.Email,
-                    name = x.Name
+                    email = x.tbl_User.Email,
+                    name = x.tbl_User.Name,
+                    date = x.Date,
+                    comment = x.Comment
                 }));
 
                 return photo;

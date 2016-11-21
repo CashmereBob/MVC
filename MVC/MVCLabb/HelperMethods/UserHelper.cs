@@ -26,6 +26,36 @@ namespace MVCLabb.HelperMethods
             return null;
         }
 
+        internal static bool LoginUser(string email, string password)
+        {
+            using (var dbCtx = new MVCLabbEntities())
+            {
+
+                foreach (var user in dbCtx.tbl_User)
+                {
+                    if (email == user.Email && UserHelper.GenerateSHA256Hash(password, user.Salt) == user.Password)
+                    {
+                        var identity = new ClaimsIdentity(new[] {
+                        new Claim(ClaimTypes.Name, user.Name),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User")
+                        },
+                            "ApplicationCookie");
+
+                        var ctx = HttpContext.Current.Request.GetOwinContext();
+                        var authManager = ctx.Authentication;
+
+                        authManager.SignIn(identity);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static string CreateSalt(int size) //Metod för att skapa salt, tar en inparameter som bestämmer längden på saltet.
         {
             var rng = new System.Security.Cryptography.RNGCryptoServiceProvider(); //Skapar upp en ny "Random generator" från security namespase.
@@ -42,5 +72,6 @@ namespace MVCLabb.HelperMethods
 
             return Convert.ToBase64String(hash); //Konverterar hashen till en string och returnerar.
         }
+
     }
 }

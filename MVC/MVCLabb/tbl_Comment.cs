@@ -21,8 +21,6 @@ namespace MVCLabb
         }
     
         public System.Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
         public string Comment { get; set; }
         public System.DateTime Date { get; set; }
         public System.Guid UserID { get; set; }

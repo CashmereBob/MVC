@@ -28,5 +28,6 @@ namespace MVCLabb
         public virtual DbSet<tbl_Comment> tbl_Comment { get; set; }
         public virtual DbSet<tbl_Photo> tbl_Photo { get; set; }
         public virtual DbSet<tbl_User> tbl_User { get; set; }
+        public virtual DbSet<tbl_Album> tbl_Album { get; set; }
     }
 }

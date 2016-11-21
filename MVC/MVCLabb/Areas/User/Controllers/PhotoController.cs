@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MVCLabb.Areas.Admin.Models;
+using MVCLabb.Areas.User.Models;
 using MVCLabb.Controllers;
 using System.IO;
 using MVCLabb.Models;
 using MVCLabb.HelperMethods;
 
-namespace MVCLabb.Areas.Admin.Controllers
+namespace MVCLabb.Areas.User.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class EditController : Controller
+    [Authorize(Roles = "User")]
+    public class PhotoController : Controller
     {
         Guid userID = UserHelper.GetLogedInUser().Id;
 
-        // GET: Admin/Edit
+        // GET: User/Edit
         public ActionResult Index()
         {
             using (var ctx = new MVCLabbEntities())
@@ -41,13 +41,13 @@ namespace MVCLabb.Areas.Admin.Controllers
         }
 
 
-        // GET: Admin/Edit/Create
+        // GET: User/Edit/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Edit/Create
+        // POST: User/Edit/Create
         [HttpPost]
         public ActionResult Create(CreatePhotoViewModels photo, HttpPostedFileBase photoUpload)
         {
@@ -74,7 +74,7 @@ namespace MVCLabb.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/Edit/Edit/5
+        // GET: User/Edit/Edit/5
         public ActionResult Edit(EditPhotoViewModels photo)
         {
             using (var ctx = new MVCLabbEntities())
@@ -96,7 +96,7 @@ namespace MVCLabb.Areas.Admin.Controllers
                 
         }
 
-        // POST: Admin/Edit/Edit/5
+        // POST: User/Edit/Edit/5
         [HttpPost]
         public ActionResult Edit(EditPhotoViewModels photo, FormCollection collection)
         {
@@ -119,26 +119,7 @@ namespace MVCLabb.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult EditComment(string id)
-        {
-            var photo = new EditPhotoViewModels();
-            using (var ctx = new MVCLabbEntities())
-            {
-                
-                ctx.tbl_Photo.FirstOrDefault(x => x.Id.ToString() == id && x.UserID == userID).tbl_Comment.ToList().ForEach(x =>
-                photo.Comments.Add(new CommentViewModel {
-                    id = x.Id,
-                    comment = x.Comment
-                }));
-            }
-
-
-                return View(photo.Comments);
-        }
-
-
-        // GET: Admin/Edit/Delete/5
+        // GET: User/Edit/Delete/5
         public ActionResult Delete(DeletePhotoViewModels photo)
         {
             using (var ctx = new MVCLabbEntities())
@@ -152,7 +133,7 @@ namespace MVCLabb.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Edit/Delete/5
+        // POST: User/Edit/Delete/5
         [HttpPost]
         public ActionResult Delete(DeletePhotoViewModels photo, FormCollection collection)
         {
@@ -181,5 +162,8 @@ namespace MVCLabb.Areas.Admin.Controllers
                 return View();
             }
         }
+
+    
+
     }
 }

@@ -11,6 +11,9 @@
         <AssociationConnector Association="MVCLabbModel.tbl_Photo_Comment" ManuallyRouted="false" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_User" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_User" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_Album" Width="1.5" PointX="5.875" PointY="1" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_Album" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Album_tbl_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
