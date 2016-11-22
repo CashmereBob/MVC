@@ -7,22 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MVCLabb
+namespace DataLayer
 {
     using System;
     using System.Collections.Generic;
     
     public partial class tbl_Comment
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tbl_Comment()
+        {
+            this.tbl_Photo = new HashSet<tbl_Photo>();
+        }
+    
         public System.Guid Id { get; set; }
         public string Comment { get; set; }
         public System.DateTime Date { get; set; }
         public System.Guid UserID { get; set; }
-        public Nullable<System.Guid> PhotoID { get; set; }
-        public Nullable<System.Guid> AlbumID { get; set; }
     
-        public virtual tbl_Photo tbl_Photo { get; set; }
         public virtual tbl_User tbl_User { get; set; }
-        public virtual tbl_Album tbl_Album { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Photo> tbl_Photo { get; set; }
     }
 }

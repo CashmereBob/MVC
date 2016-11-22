@@ -18,6 +18,7 @@ namespace MVCLabb
         public tbl_Album()
         {
             this.tbl_Photo = new HashSet<tbl_Photo>();
+            this.tbl_Comment = new HashSet<tbl_Comment>();
         }
     
         public System.Guid Id { get; set; }
@@ -28,5 +29,7 @@ namespace MVCLabb
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Photo> tbl_Photo { get; set; }
         public virtual tbl_User tbl_User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Comment> tbl_Comment { get; set; }
     }
 }

@@ -213,11 +213,6 @@
     <Content Include="DataBaseModel.edmx.diagram">
       <DependentUpon>DataBaseModel.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\Edit\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Edit\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Edit\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\Edit\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Edit\EditComment.cshtml" />
     <Content Include="Areas\User\Views\web.config" />
     <Content Include="Areas\User\Views\Photo\Create.cshtml" />
     <Content Include="Areas\User\Views\Photo\Delete.cshtml" />
@@ -255,14 +250,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\EditController.cs" />
-    <Compile Include="Areas\Admin\Models\PhotoViewModels.cs" />
     <Compile Include="Areas\User\Controllers\AlbumController.cs" />
     <Compile Include="Areas\User\Controllers\CommentController.cs" />
     <Compile Include="Areas\User\Controllers\PhotoController.cs" />
+    <Compile Include="Areas\User\Mapper\AlbumMapper.cs" />
     <Compile Include="Areas\User\Models\AlbumViewModels.cs" />
     <Compile Include="Areas\User\Models\PhotoViewModels.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
+    <Compile Include="BI\AlbumBI.cs" />
+    <Compile Include="BI\CommentBI.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
@@ -284,8 +280,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelperMethods\PhotoHelper.cs" />
+    <Compile Include="BI\PhotoBI.cs" />
+    <Compile Include="BI\UserBI.cs" />
     <Compile Include="HelperMethods\UserHelper.cs" />
+    <Compile Include="Mapper\CommentMapper.cs" />
+    <Compile Include="Mapper\PhotoMapper.cs" />
+    <Compile Include="Mapper\UserMapper.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
@@ -323,6 +323,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\User\Views\Shared\" />
     <Folder Include="Photos\" />

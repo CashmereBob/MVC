@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MVCLabb.BI;
+using MVCLabb.Mapper;
 using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Controllers
@@ -17,88 +19,47 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            
-                return View(GetAllPhotosFromDb());
-            
+            List<tbl_Photo> photosFromDB = PhotoBI.GetAllPhotosFromDb();
+            List<IndexPhotoViewModel> photos = new List<IndexPhotoViewModel>();
+            photosFromDB.ForEach(x => photos.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
 
+            return View(photos);
         }
 
-        public static List<IndexPhotoViewModel> GetAllPhotosFromDb()
-        {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var model = new List<IndexPhotoViewModel>();
-                ctx.tbl_Photo.ToList().ForEach(x =>
-                model.Add(new IndexPhotoViewModel
-                {
-                    Id = x.Id,
-                    Path = x.Path,
-                    Name = x.Name
-                }));
-
-                return model;
-            }
-        }
+        
 
         // GET: Photo/Details/5
         [AllowAnonymous]
         public ActionResult Details(DetailsPhotoViewModel photo)
         {
-            
-            return View(GetPhotoFromDb(photo));
+            tbl_Photo photoFromDB = PhotoBI.GetPhotoFromDbById(photo.Id);
+            photo = PhotoMapper.MapDetailsPhotoViewModel(photoFromDB);
+
+            return View(photo);
         }
 
         [HttpPost]
         [Authorize]
         public ActionResult Details(DetailsPhotoViewModel photo, FormCollection collection)
         {
+            var comment = new tbl_Comment { 
+                Date = DateTime.Now,
+                Comment = collection["comment"],
+                UserID = UserHelper.GetLogedInUser().Id
+            };
 
-            using (var ctx = new MVCLabbEntities())
-            {
-                var photoToUpdate = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
-                photoToUpdate.tbl_Comment.Add(new tbl_Comment
-                {
-                    Date = DateTime.Now,
-                    Comment = collection["comment"],
-                    UserID = UserHelper.GetLogedInUser().Id
-                   
-                });
+            tbl_Photo photoToDB = PhotoMapper.MapDetailsPhotoViewModel(photo);
 
-                ctx.SaveChanges();
-            }
+            CommentBI.AddCommentToPhoto(comment, photoToDB);
 
+            tbl_Photo photoFromDB = PhotoBI.GetPhotoFromDbById(photo.Id);
+            photo = PhotoMapper.MapDetailsPhotoViewModel(photoFromDB);
 
-            return View(GetPhotoFromDb(photo));
+            return View(photo);
         }
 
 
-        private DetailsPhotoViewModel GetPhotoFromDb(DetailsPhotoViewModel photo)
-        {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var photoFromDB = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
-                photo.Name = photoFromDB.Name;
-                photo.Description = photoFromDB.Description;
-                photo.Path = photoFromDB.Path;
-                photo.Date = photoFromDB.Date;
-                photo.UploaderName = photoFromDB.tbl_User.Name;
-                photo.Album = photoFromDB.AlbumID != null ? photoFromDB.tbl_Album.Name : "Uncategorized";
-
-                photoFromDB.tbl_Comment.ToList().ForEach(x =>
-                photo.Comments.Add(new CommentViewModel
-                {
-                    id = x.Id,
-                    email = x.tbl_User.Email,
-                    name = x.tbl_User.Name,
-                    date = x.Date,
-                    comment = x.Comment
-                }));
-
-                return photo;
-            }
-
-
-        }
+       
 
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MVCLabb
+namespace DataLayer
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +17,9 @@ namespace MVCLabb
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tbl_User()
         {
-            this.tbl_Photo = new HashSet<tbl_Photo>();
             this.tbl_Album = new HashSet<tbl_Album>();
             this.tbl_Comment = new HashSet<tbl_Comment>();
+            this.tbl_Photo = new HashSet<tbl_Photo>();
         }
     
         public System.Guid Id { get; set; }
@@ -31,10 +31,10 @@ namespace MVCLabb
         public string Salt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tbl_Photo> tbl_Photo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Album> tbl_Album { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Comment> tbl_Comment { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Photo> tbl_Photo { get; set; }
     }
 }

@@ -5,7 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using MVCLabb.Models;
 using System.Security.Claims;
+using MVCLabb.BI;
 using MVCLabb.HelperMethods;
+using MVCLabb.Mapper;
 
 namespace MVCLabb.Controllers
 {
@@ -28,14 +30,33 @@ namespace MVCLabb.Controllers
                 return View(model);
             }
 
-            if (UserHelper.LoginUser(model.Email, model.Password))
+            var user = UserBI.ValidateLogin(model.Email, model.Password);
+
+            if (user != null)
             {
-                    return RedirectToAction("Index", "Home", new { area = "" });
+                SetUpAuthCookie(user);
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
 
             ModelState.AddModelError("", "Invalid email or passsword");
             return View(model);
-              
+
+        }
+
+        private void SetUpAuthCookie(tbl_User user)
+        {
+            var identity = new ClaimsIdentity(new[] {
+                        new Claim(ClaimTypes.Name, user.Name),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User")
+                        },
+                           "ApplicationCookie");
+
+            var ctx = Request.GetOwinContext();
+            var authManager = ctx.Authentication;
+
+            authManager.SignIn(identity);
         }
 
         [HttpGet]
@@ -61,27 +82,8 @@ namespace MVCLabb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var salt = UserHelper.CreateSalt(10);
-                var password = UserHelper.GenerateSHA256Hash(model.Password, salt);
-
-
-                using (var ctx = new MVCLabbEntities())
-                {
-                    ctx.tbl_User.Add(new tbl_User
-                    {
-                        Id = Guid.NewGuid(),
-                        Email = model.Email,
-                        Password = password,
-                        Salt = salt,
-                        Country = "nn",
-                        Admin = false,
-                        Name = model.Name
-
-                    });
-
-                    ctx.SaveChanges();
-                }
-
+                tbl_User user = UserMapper.MapRegistrationViewModel(model);
+                UserBI.AddUser(user);
             }
             else
             {
@@ -94,22 +96,12 @@ namespace MVCLabb.Controllers
         [HttpGet]
         public ActionResult Manage()
         {
-
-
             var user = UserHelper.GetLogedInUser();
 
-            if (user != null) { 
-
-                    var model = new ManageViewModel
-                    {
-                        Name = user.Name,
-                        Country = user.Country,
-                        Email = user.Email,
-                        Password = user.Password,
-                        ConfirmPassword = user.Password
-                    };
-
-                    return View(model);
+            if (user != null)
+            {
+                ManageViewModel model = UserMapper.MapManageViewModel(user);
+                return View(model);
             }
 
             return View();
@@ -120,27 +112,11 @@ namespace MVCLabb.Controllers
         {
             if (ModelState.IsValid)
             {
-                
 
-                using (var ctx = new MVCLabbEntities())
-                {
-                    tbl_User user = ctx.tbl_User.Where(x => x.Email == model.Email).FirstOrDefault();
-                    user.Name = model.Name;
-                    user.Country = model.Country;
-                    user.Email = model.Email;
+                tbl_User user = UserMapper.MapManageViewModel(model);
+                user.Id = UserHelper.GetLogedInUser().Id;
 
-                    if (user.Password != model.Password)
-                    {
-                        var salt = UserHelper.CreateSalt(10);
-                        var password = UserHelper.GenerateSHA256Hash(model.Password, salt);
-
-                        user.Salt = salt;
-                        user.Password = password;
-
-                    }
-                    
-                    ctx.SaveChanges();
-                }
+                UserBI.UpdateUser(user);
 
             }
             else

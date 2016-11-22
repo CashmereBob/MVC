@@ -7,6 +7,7 @@ using MVCLabb.Areas.User.Models;
 using MVCLabb.Controllers;
 using System.IO;
 using MVCLabb.Models;
+using MVCLabb.BI;
 using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Areas.User.Controllers

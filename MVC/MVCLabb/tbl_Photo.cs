@@ -28,9 +28,9 @@ namespace MVCLabb
         public System.Guid UserID { get; set; }
         public Nullable<System.Guid> AlbumID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tbl_Comment> tbl_Comment { get; set; }
         public virtual tbl_User tbl_User { get; set; }
         public virtual tbl_Album tbl_Album { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Comment> tbl_Comment { get; set; }
     }
 }

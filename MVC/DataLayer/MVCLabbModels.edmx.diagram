@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2b64c453716f4befb234091de927c05e" Name="Diagram1">
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_Album" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_Comment" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_Photo" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_User" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Album_tbl_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_Album" ManuallyRouted="false" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MVCLabbModel.tbl_Photo_Comment" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

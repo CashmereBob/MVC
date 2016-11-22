@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MVCLabb
+namespace DataLayer
 {
     using System;
     using System.Data.Entity;
@@ -25,9 +25,9 @@ namespace MVCLabb
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<tbl_Photo> tbl_Photo { get; set; }
-        public virtual DbSet<tbl_User> tbl_User { get; set; }
         public virtual DbSet<tbl_Album> tbl_Album { get; set; }
         public virtual DbSet<tbl_Comment> tbl_Comment { get; set; }
+        public virtual DbSet<tbl_Photo> tbl_Photo { get; set; }
+        public virtual DbSet<tbl_User> tbl_User { get; set; }
     }
 }

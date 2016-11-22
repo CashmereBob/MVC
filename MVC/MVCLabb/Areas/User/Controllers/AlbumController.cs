@@ -1,10 +1,12 @@
 ﻿using MVCLabb.Areas.User.Models;
-using MVCLabb.HelperMethods;
+using MVCLabb.Areas.User.Mapper;
+using MVCLabb.BI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Areas.User.Controllers
 {
@@ -14,21 +16,12 @@ namespace MVCLabb.Areas.User.Controllers
         Guid userID = UserHelper.GetLogedInUser().Id;
         public ActionResult Index()
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                IList<ListAlbumViewModel> model = new List<ListAlbumViewModel>();
 
-                ctx.tbl_Album.Where(x => x.tbl_User.Id == userID).ToList().ForEach(x =>
-                model.Add(new ListAlbumViewModel
-                {
-                    Id = x.Id,
-                    Description = x.Description,
-                    Name = x.Name,
-                    Photos = x.tbl_Photo.Count()
-                }));
+            List<tbl_Album> albumsDB = AlbumBI.GettAllAlbumsByUserID(userID);
+            List<ListAlbumViewModel> albums = new List<ListAlbumViewModel>();
+            albumsDB.ForEach(x => albums.Add(AlbumMapper.MapListAlbumViewModel(x)));
+            return View(albums);
 
-                return View(model);
-            }
 
         }
 
@@ -41,81 +34,65 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpPost]
         public ActionResult Create(EditAlbumViewModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                using (var ctx = new MVCLabbEntities())
-                {
-                    ctx.tbl_Album.Add(new tbl_Album
-                    {
-                        Name = model.Name,
-                        Description = model.Description,
-                        UserID = userID
-
-                    });
-
-                    ctx.SaveChanges();
-                }
-                return RedirectToAction("ListAlbums");
+                tbl_Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
+                AlbumBI.AddAlbum(album);
+               
             }
-            catch
-            {
-                return View(model);
-            }
-
-
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult Edit(EditAlbumViewModel model)
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var albumFromDb = ctx.tbl_Album.FirstOrDefault(x => x.Id == model.Id && x.UserID == userID);
 
-                model.Name = albumFromDb.Name;
-                model.Description = albumFromDb.Description;
+            tbl_Album album = AlbumBI.GetAlbumByID(model.Id);
+
+            model = AlbumMapper.MapEditAlbumViewModel(album);
+
+            if (album.UserID == userID)
+            {
+                return View(model);
             }
-            return View(model);
+
+            return View();
         }
 
         [HttpPost]
         public ActionResult Edit(EditAlbumViewModel model, FormCollection collection)
         {
-            using (var ctx = new MVCLabbEntities())
+            if (ModelState.IsValid)
             {
-                var albumFromDb = ctx.tbl_Album.FirstOrDefault(x => x.Id == model.Id && x.UserID == userID);
-                albumFromDb.Name = model.Name;
-                albumFromDb.Description = model.Description;
+                tbl_Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
 
-                ctx.SaveChanges();
+                AlbumBI.UpdateAlbum(album);
+                
             }
-            return RedirectToAction("ListAlbums");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult Delete(EditAlbumViewModel model)
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var albumFromDb = ctx.tbl_Album.FirstOrDefault(x => x.Id == model.Id && x.UserID == userID);
+            tbl_Album album = AlbumBI.GetAlbumByID(model.Id);
 
-                model.Name = albumFromDb.Name;
-                model.Description = albumFromDb.Description;
+            model = AlbumMapper.MapEditAlbumViewModel(album);
+
+            if (album.UserID == userID)
+            {
+                return View(model);
             }
-            return View(model);
+
+            return View();
         }
 
         [HttpPost]
         public ActionResult Delete(EditAlbumViewModel model, FormCollection collection)
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var albumFromDb = ctx.tbl_Album.FirstOrDefault(x => x.Id == model.Id && x.UserID == userID);
-                ctx.tbl_Album.Remove(albumFromDb);
-
-                ctx.SaveChanges();
-            }
-            return RedirectToAction("ListAlbums");
+            tbl_Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
+            AlbumBI.DeleteAlbum(album);
+            return RedirectToAction("Index");
         }
     }
 }
