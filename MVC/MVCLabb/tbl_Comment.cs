@@ -21,8 +21,8 @@ namespace MVCLabb
         public Nullable<System.Guid> PhotoID { get; set; }
         public Nullable<System.Guid> AlbumID { get; set; }
     
+        public virtual tbl_Album tbl_Album { get; set; }
         public virtual tbl_Photo tbl_Photo { get; set; }
         public virtual tbl_User tbl_User { get; set; }
-        public virtual tbl_Album tbl_Album { get; set; }
     }
 }

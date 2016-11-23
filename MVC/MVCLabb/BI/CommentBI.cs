@@ -7,10 +7,11 @@ namespace MVCLabb.BI
 {
     public static class CommentBI
     {
-        public static void AddCommentToPhoto(tbl_Comment comment)
+        public static void AddComment(tbl_Comment comment)
         {
             using (var ctx = new MVCLabbEntities())
             {
+                comment.Id = Guid.NewGuid();
                 ctx.tbl_Comment.Add(comment);
                 ctx.SaveChanges();
             }

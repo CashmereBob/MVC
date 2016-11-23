@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MVCLabb.Models;
+using System.IO;
+
 namespace MVCLabb.BI
 {
     public static class PhotoBI
@@ -22,6 +24,14 @@ namespace MVCLabb.BI
             return result;
         }
 
+        internal static List<tbl_Photo> GetPhotoFromDbByUserId(Guid userID)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Photo.Where(x => x.UserID == userID).ToList();
+            }
+        }
+
         public static List<tbl_Photo> GetAllPhotosFromDb()
         {
             using (var ctx = new MVCLabbEntities())
@@ -38,14 +48,41 @@ namespace MVCLabb.BI
             }
         }
 
-        internal static void UpdatePhoto(tbl_Photo photoToDB)
+        internal static void AddPhotoToDBAndFolder(tbl_Photo photoToDB, HttpPostedFileBase photoUpload)
+        {
+            photoToDB.Path = $" /Photos/{photoUpload.FileName}";
+
+            using (var ctx = new MVCLabbEntities())
+            {
+                ctx.tbl_Photo.Add(photoToDB);
+
+                ctx.SaveChanges();
+            }
+
+
+        }
+
+        internal static void UdaptePhoto(tbl_Photo photo)
         {
             using (var ctx = new MVCLabbEntities())
             {
-                var photo = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photoToDB.Id);
-                photo.tbl_Comment = photoToDB.tbl_Comment;
+                var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);
+                photoFromDb.Name = photo.Name;
+                photoFromDb.Description = photo.Description;
+                photoFromDb.AlbumID = photo.AlbumID;
+                ctx.SaveChanges();
+            }
+        }
+
+        internal static void DeletePhotoFromDB(tbl_Photo model)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                var photoToDelete = ctx.tbl_Photo.FirstOrDefault(x => x.Id == model.Id);
+                ctx.tbl_Photo.Remove(photoToDelete);
 
                 ctx.SaveChanges();
+
             }
         }
     }

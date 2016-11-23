@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using MVCLabb.Areas.User.Models;
 using MVCLabb.Controllers;
 using System.IO;
-using MVCLabb.Models;
 using MVCLabb.BI;
 using MVCLabb.HelperMethods;
+using MVCLabb.Areas.User.Mapper;
 
 namespace MVCLabb.Areas.User.Controllers
 {
@@ -20,51 +20,35 @@ namespace MVCLabb.Areas.User.Controllers
         // GET: User/Edit
         public ActionResult Index()
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                IList<IndexPhotoViewModels> model = new List<IndexPhotoViewModels>();
-                
+            List<tbl_Photo> photosFromDB = PhotoBI.GetPhotoFromDbByUserId(userID);
+            ICollection<IndexPhotoViewModels> model = new List<IndexPhotoViewModels>();
+            photosFromDB.ForEach(x => model.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
 
-                ctx.tbl_Photo.Where(x => x.UserID == userID).ToList().ForEach(x =>
-                model.Add(new IndexPhotoViewModels {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description,
-                    Path = x.Path,
-                    Comments = x.tbl_Comment.Count()
-                })
-                
-                );
-
-                return View(model);
-            }
-
+            return View(model);
+            
         }
 
 
         // GET: User/Edit/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new CreatePhotoViewModels();
+            var albums = AlbumBI.GettAllAlbumsByUserID(userID);
+            model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "0" });
+            albums.ForEach(x => model.Albums.Add(new SelectListItem {Text = x.Name, Value = x.Id.ToString() }));
+
+            return View(model);
         }
 
         // POST: User/Edit/Create
         [HttpPost]
         public ActionResult Create(CreatePhotoViewModels photo, HttpPostedFileBase photoUpload)
         {
+            tbl_Photo photoToDB = PhotoMapper.MapCreatePhotoViewModel(photo);
+            photoToDB.UserID = UserHelper.GetLogedInUser().Id;
             try
             {
-                using (var ctx = new MVCLabbEntities())
-                {
-                    ctx.tbl_Photo.Add(new tbl_Photo {
-                        Name = photo.Name,
-                        Description = photo.Description,
-                        Path = $" /Photos/{photoUpload.FileName}",
-                        UserID = UserHelper.GetLogedInUser().Id
-                    });
-
-                    ctx.SaveChanges();
-                }
+                PhotoBI.AddPhotoToDBAndFolder(photoToDB, photoUpload);
 
                 photoUpload.SaveAs(Path.Combine(Server.MapPath("~/Photos"), photoUpload.FileName));
                 return RedirectToAction("Index");
@@ -78,22 +62,13 @@ namespace MVCLabb.Areas.User.Controllers
         // GET: User/Edit/Edit/5
         public ActionResult Edit(EditPhotoViewModels photo)
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var photoFromDB = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
+            tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
+            photo = PhotoMapper.MapEditPhotoViewModel(model);
 
-                photo.Name = photoFromDB.Name;
-                photo.Description = photoFromDB.Description;
-                photo.Path = photoFromDB.Path;
-
-                photoFromDB.tbl_Comment.ToList().ForEach(x =>
-                photo.Comments.Add(new CommentViewModel {
-                    id = x.Id,
-                    comment = x.Comment
-                }));
-
+            if (model.UserID == userID)
                 return View(photo);
-            }
+            else
+                return View();
                 
         }
 
@@ -101,17 +76,11 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpPost]
         public ActionResult Edit(EditPhotoViewModels photo, FormCollection collection)
         {
+            tbl_Photo model = PhotoMapper.MapEditPhotoViewModel(photo);
+
             try
             {
-
-                using (var ctx = new MVCLabbEntities())
-                {
-                    var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
-                    photoFromDb.Name = photo.Name;
-                    photoFromDb.Description = photo.Description;
-                    ctx.SaveChanges();
-                }
-
+                PhotoBI.UdaptePhoto(model);
                 return RedirectToAction("Index");
             }
             catch
@@ -123,14 +92,16 @@ namespace MVCLabb.Areas.User.Controllers
         // GET: User/Edit/Delete/5
         public ActionResult Delete(DeletePhotoViewModels photo)
         {
-            using (var ctx = new MVCLabbEntities())
-            {
-                var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
-                photo.Name = photoFromDb.Name;
-                photo.Description = photoFromDb.Description;
-                photo.Path = photoFromDb.Path;
+            tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
+            photo = PhotoMapper.MapDeletePhotoViewModel(model);
 
+            if (model.UserID == userID)
+            {
                 return View(photo);
+            }
+            else
+            {
+                return View();
             }
         }
 
@@ -140,23 +111,21 @@ namespace MVCLabb.Areas.User.Controllers
         {
             try
             {
-                using (var ctx = new MVCLabbEntities())
+                tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
+                if (model.UserID == userID)
+                { 
+                PhotoBI.DeletePhotoFromDB(model);
+
+                string fullPath = Request.MapPath(model.Path);
+
+                if (System.IO.File.Exists(fullPath))
                 {
-                    var photoToDelete = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id && x.UserID == userID);
-                    ctx.tbl_Photo.Remove(photoToDelete);
-
-                    ctx.SaveChanges();
-
-                    string fullPath = Request.MapPath(photoToDelete.Path);
-
-                    if (System.IO.File.Exists(fullPath))
-                    {
-                        System.IO.File.Delete(fullPath);
-                    }
-
+                    System.IO.File.Delete(fullPath);
                 }
 
                 return RedirectToAction("Index");
+                }
+                return View();
             }
             catch
             {

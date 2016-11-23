@@ -254,6 +254,7 @@
     <Compile Include="Areas\User\Controllers\CommentController.cs" />
     <Compile Include="Areas\User\Controllers\PhotoController.cs" />
     <Compile Include="Areas\User\Mapper\AlbumMapper.cs" />
+    <Compile Include="Areas\User\Mapper\PhotoMapper.cs" />
     <Compile Include="Areas\User\Models\AlbumViewModels.cs" />
     <Compile Include="Areas\User\Models\PhotoViewModels.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />

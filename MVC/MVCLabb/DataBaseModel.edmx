@@ -74,14 +74,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_Comment_tbl_Photo">
-          <End Role="tbl_Photo" Type="Self.tbl_Photo" Multiplicity="1" />
+          <End Role="tbl_Photo" Type="Self.tbl_Photo" Multiplicity="0..1" />
           <End Role="tbl_Comment" Type="Self.tbl_Comment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tbl_Photo">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="tbl_Comment">
-              <PropertyRef Name="UserID" />
+              <PropertyRef Name="PhotoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -169,7 +169,7 @@
           <Property Name="AlbumID" Type="Guid" />
           <NavigationProperty Name="tbl_Album" Relationship="MVCLabbModel.FK_tbl_Photo_tbl_Album" FromRole="tbl_Photo" ToRole="tbl_Album" />
           <NavigationProperty Name="tbl_Comment" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_Photo" FromRole="tbl_Photo" ToRole="tbl_Comment" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="tbl_User">
           <Key>
             <PropertyRef Name="Id" />
@@ -202,6 +202,10 @@
             <End Role="tbl_Album" EntitySet="tbl_Album" />
           </AssociationSet>
           <EntitySet Name="tbl_Comment" EntityType="MVCLabbModel.tbl_Comment" />
+          <AssociationSet Name="FK_tbl_Comment_tbl_Album" Association="MVCLabbModel.FK_tbl_Comment_tbl_Album">
+            <End Role="tbl_Album" EntitySet="tbl_Album" />
+            <End Role="tbl_Comment" EntitySet="tbl_Comment" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbl_Comment_tbl_Photo" Association="MVCLabbModel.FK_tbl_Comment_tbl_Photo">
             <End Role="tbl_Photo" EntitySet="tbl_Photo" />
             <End Role="tbl_Comment" EntitySet="tbl_Comment" />
@@ -210,11 +214,7 @@
             <End Role="tbl_User" EntitySet="tbl_User" />
             <End Role="tbl_Comment" EntitySet="tbl_Comment" />
           </AssociationSet>
-          <AssociationSet Name="FK_tbl_Comment_tbl_Album" Association="MVCLabbModel.FK_tbl_Comment_tbl_Album">
-            <End Role="tbl_Album" EntitySet="tbl_Album" />
-            <End Role="tbl_Comment" EntitySet="tbl_Comment" />
-          </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <Association Name="FK_tbl_Photo_tbl_User">
           <End Type="MVCLabbModel.tbl_User" Role="tbl_User" Multiplicity="1" />
           <End Type="MVCLabbModel.tbl_Photo" Role="tbl_Photo" Multiplicity="*" />
@@ -272,20 +272,32 @@
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserID" Type="Guid" Nullable="false" />
           <Property Name="PhotoID" Type="Guid" />
-          <NavigationProperty Name="tbl_Photo" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_Photo" FromRole="tbl_Comment" ToRole="tbl_Photo" />
-          <NavigationProperty Name="tbl_User" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_User" FromRole="tbl_Comment" ToRole="tbl_User" />
           <Property Name="AlbumID" Type="Guid" />
           <NavigationProperty Name="tbl_Album" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_Album" FromRole="tbl_Comment" ToRole="tbl_Album" />
+          <NavigationProperty Name="tbl_Photo" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_Photo" FromRole="tbl_Comment" ToRole="tbl_Photo" />
+          <NavigationProperty Name="tbl_User" Relationship="MVCLabbModel.FK_tbl_Comment_tbl_User" FromRole="tbl_Comment" ToRole="tbl_User" />
         </EntityType>
+        <Association Name="FK_tbl_Comment_tbl_Album">
+          <End Type="MVCLabbModel.tbl_Album" Role="tbl_Album" Multiplicity="0..1" />
+          <End Type="MVCLabbModel.tbl_Comment" Role="tbl_Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Album">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Comment">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbl_Comment_tbl_Photo">
-          <End Type="MVCLabbModel.tbl_Photo" Role="tbl_Photo" Multiplicity="1" />
+          <End Type="MVCLabbModel.tbl_Photo" Role="tbl_Photo" Multiplicity="0..1" />
           <End Type="MVCLabbModel.tbl_Comment" Role="tbl_Comment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tbl_Photo">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="tbl_Comment">
-              <PropertyRef Name="UserID" />
+              <PropertyRef Name="PhotoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -301,19 +313,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tbl_Comment_tbl_Album">
-          <End Type="MVCLabbModel.tbl_Album" Role="tbl_Album" Multiplicity="0..1" />
-          <End Type="MVCLabbModel.tbl_Comment" Role="tbl_Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tbl_Album">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="tbl_Comment">
-              <PropertyRef Name="AlbumID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>

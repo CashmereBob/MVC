@@ -42,15 +42,14 @@ namespace MVCLabb.Controllers
         [Authorize]
         public ActionResult Details(DetailsPhotoViewModel photo, FormCollection collection)
         {
-            var comment = new tbl_Comment { 
+            var comment = new tbl_Comment {
                 Date = DateTime.Now,
                 Comment = collection["comment"],
-                UserID = UserHelper.GetLogedInUser().Id
+                UserID = UserHelper.GetLogedInUser().Id,
+                PhotoID = photo.Id
             };
 
-            tbl_Photo photoToDB = PhotoMapper.MapDetailsPhotoViewModel(photo);
-
-            CommentBI.AddCommentToPhoto(comment, photoToDB);
+            CommentBI.AddComment(comment);
 
             tbl_Photo photoFromDB = PhotoBI.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapDetailsPhotoViewModel(photoFromDB);

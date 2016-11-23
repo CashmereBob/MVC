@@ -31,19 +31,22 @@ namespace MVCLabb.Areas.User.Controllers
 
             model = CommentMapper.MapCommentViewModel(comment);
 
-
-            return View(model);
+            if (comment.tbl_Photo.UserID == userID)
+            {
+                return View(model);
+            }
+            return View();
 
         }
 
         [HttpPost]
         public ActionResult Delete(CommentViewModel model, FormCollection collection)
         {
-            tbl_Comment comment = CommentMapper.MapCommentViewModel(model);
+            var comment = CommentBI.GetCommentByID(model.id);
 
             CommentBI.DeleteComment(comment);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { id=comment.PhotoID });
 
         }
     }

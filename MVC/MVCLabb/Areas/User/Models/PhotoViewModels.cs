@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using MVCLabb.Models;
+using System.Web.Mvc;
 
 namespace MVCLabb.Areas.User.Models
 {
@@ -16,7 +17,14 @@ namespace MVCLabb.Areas.User.Models
         public string Description { get; set; }
         public string Album { get; set; }
 
-       
+        public string SelectedAlbumsId { get; set; }
+        public ICollection <SelectListItem> Albums { get; set; }
+        public Guid AlbumId { get; set; }
+        public CreatePhotoViewModels()
+        {
+            Albums = new HashSet<SelectListItem>();
+        }
+
 
     }
 
@@ -43,6 +51,7 @@ namespace MVCLabb.Areas.User.Models
      
         public string Description { get; set; }
         public ICollection<string> Albums { get; set; }
+        public Guid AlbumId { get; set; }
         public ICollection<CommentViewModel> Comments { get; set; }
 
         public EditPhotoViewModels()

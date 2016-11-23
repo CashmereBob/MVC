@@ -6,15 +6,15 @@
     <edmx:Diagrams>
       <Diagram DiagramId="43aff11ce93e43a0960f7b0d7ff5f626" Name="Diagram1">
         <EntityTypeShape EntityType="MVCLabbModel.tbl_Photo" Width="1.5" PointX="5.125" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVCLabbModel.tbl_User" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_User" Width="1.5" PointX="1" PointY="1.875" IsExpanded="true" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_User" />
-        <EntityTypeShape EntityType="MVCLabbModel.tbl_Album" Width="1.5" PointX="8.875" PointY="1.75" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_Album" Width="1.5" PointX="9" PointY="2.75" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Photo_tbl_Album" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Album_tbl_User" />
-        <EntityTypeShape EntityType="MVCLabbModel.tbl_Comment" Width="1.5" PointX="5.25" PointY="3.25" />
+        <EntityTypeShape EntityType="MVCLabbModel.tbl_Comment" Width="1.5" PointX="4.875" PointY="3.875" />
+        <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_Album" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_Photo" />
         <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_User" />
-        <AssociationConnector Association="MVCLabbModel.FK_tbl_Comment_tbl_Album" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
