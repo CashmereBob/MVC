@@ -322,6 +322,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_ThumbnailsAlbum.cshtml" />
     <Content Include="Views\Photo\_AlbumDetails.cshtml" />
+    <Content Include="Views\Photo\_PhotoDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

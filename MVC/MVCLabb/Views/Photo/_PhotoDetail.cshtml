@@ -1,0 +1,31 @@
+﻿@model MVCLabb.Models.DetailsPhotoViewModel
+
+<div class="row" style="padding: 20px;">
+    <div class="col-sm-12 col-md-6">
+        <img src="@Model.Path" class="img-thumbnail" style="max-width: 100%;" />
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <i>@Html.DisplayFor(model => model.Date)</i>
+        <h2>@Html.DisplayFor(model => model.Name)</h2>
+        <p>@Html.DisplayFor(model => model.Description)</p>
+        <i>Uploaded by: @Model.UploaderName | From album: @Model.Album</i>
+        <hr />
+
+        <h2>Comments</h2>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <textarea id="actualComment" name="comment" class="form-control" style="width: 100%;" rows="5" required></textarea>
+                    <button id="submit" class="btn btn-default">Submit</button>
+        }
+        <hr />
+        
+        <ol id="list" style="padding: 0; margin: 0;">
+            <li v-for="commentn in comments">
+                <h3>{{ commentn.name }}</h3>
+                <p>{{ commentn.comment }}</p>
+                <i>{{ commentn.email }} || {{ commentn.date }}</i>
+            </li>
+        </ol>
+
+    </div>
+</div>

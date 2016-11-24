@@ -35,7 +35,7 @@ namespace MVCLabb.Controllers
             tbl_Photo photoFromDB = PhotoBI.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapDetailsPhotoViewModel(photoFromDB);
 
-            return View(photo);
+            return PartialView("_PhotoDetail", photo);
         }
 
         [HttpPost]
