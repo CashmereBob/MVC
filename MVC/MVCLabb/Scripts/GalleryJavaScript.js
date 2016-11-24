@@ -1,4 +1,4 @@
-﻿var content = $("#masonarycontainer");
+﻿var content = $("#content");
 var search = $("#search");
 var partial = "photo";
 
@@ -12,7 +12,6 @@ albumButton.click(function (e) {
     albumButton.addClass('active');
     photoButton.removeClass('active');
     setPartial()
-    
 });
 
 photoButton.click(function (e) {
@@ -23,13 +22,14 @@ photoButton.click(function (e) {
 });
 
 search.keyup(function (e) {
-    setPartial()
+    setPartial();
 });
 
 var model = {
     Search: "",
     Filter: ""
-}
+};
+
 
 
 function setPartial() {
@@ -41,7 +41,9 @@ function setPartial() {
         url: "/Home/Media",
         data: model,
         success: function (data) {
-            content.html(data)
+            content.html("");
+            $("#masonarycontainer").html(data);
+            GoToAlbum();
             whileOverfloed();
         },
         contentType: "application/json; charset=utf-8",
@@ -50,4 +52,3 @@ function setPartial() {
     
     
 }
-

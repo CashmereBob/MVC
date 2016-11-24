@@ -66,6 +66,14 @@ namespace MVCLabb.BI
             }
         }
 
+        internal static tbl_Album GetAlbumByID(string id)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Album.Include("tbl_User").Include("tbl_Photo").Include("tbl_Comment").FirstOrDefault(x => x.Id.ToString() == id);
+            }
+        }
+
         internal static void DeleteAlbum(tbl_Album album)
         {
             using (var ctx = new MVCLabbEntities())

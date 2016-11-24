@@ -30,5 +30,17 @@ namespace MVCLabb.Mapper
                 UserID = comment.userID
             };
         }
+
+        internal static ICollection<CommentViewModel> MapCommentViewModel(ICollection<tbl_Comment> comments)
+        {
+            var result = new List<CommentViewModel>();
+
+            comments.ToList().ForEach(x => result.Add(MapCommentViewModel(x)));
+
+            return result;
+
+
+
+        }
     }
 }

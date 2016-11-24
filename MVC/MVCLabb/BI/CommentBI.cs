@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MVCLabb.Models;
 
 namespace MVCLabb.BI
 {
@@ -50,6 +51,14 @@ namespace MVCLabb.BI
             using (var ctx = new MVCLabbEntities())
             {
                 return ctx.tbl_Comment.Include("tbl_User").Include("tbl_Photo").FirstOrDefault(x => x.Id == id);
+            }
+        }
+
+        internal static List<tbl_Comment> GetAllComentsByAlbumID(string id)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Comment.Include("tbl_User").Include("tbl_Photo").Where(x => x.AlbumID.ToString() == id).ToList();
             }
         }
     }

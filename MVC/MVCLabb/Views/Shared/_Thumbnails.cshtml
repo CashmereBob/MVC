@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<MVCLabb.Models.IndexPhotoViewModel>
 
 
-@foreach (var item in Model)
-{
+    @foreach (var item in Model)
+    {
 
-<div class="col-xs-12 col-sm-6 col-md-4 masonaryitem">
-    <a href="@string.Format($"/Photo/Details/{item.Id}")" class="thumbnail">
-        <img src="@item.Path" alt="@item.Name">
-    </a>
+        <div class="col-xs-12 col-sm-6 col-md-4 masonaryitem">
+            <a href="@string.Format($"/Photo/Details/{item.Id}")" class="thumbnail">
+                <img src="@item.Path" alt="@item.Name">
+            </a>
 
-</div>
+        </div>
 
-}
+    }

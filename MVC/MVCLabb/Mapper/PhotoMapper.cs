@@ -34,6 +34,13 @@ namespace MVCLabb.Mapper
             
         }
 
+        internal static ICollection<IndexPhotoViewModel> MapIndexPhotoViewModel(ICollection<tbl_Photo> photos)
+        {
+            var result = new List<IndexPhotoViewModel>();
+            photos.ToList().ForEach(x => result.Add(MapIndexPhotoViewModel(x)));
+            return result;
+        }
+
         internal static IndexPhotoViewModel MapIndexPhotoViewModel(tbl_Photo photoFromDB)
         {
             return new IndexPhotoViewModel

@@ -19,10 +19,10 @@ function isOverflowed() {
     });
     return overflow;
 }
+
 function whileOverfloed() {
     
-
-    container.height("90vh");
+    container.height("40vh");
     while (isOverflowed() === true) {
             container.height(container.height() + 200);
             

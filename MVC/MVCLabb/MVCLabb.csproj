@@ -225,6 +225,7 @@
     <Content Include="Areas\User\Views\Album\Delete.cshtml" />
     <Content Include="Areas\User\Views\Comment\Delete.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\AlbumJavaScript.js" />
     <Content Include="Scripts\GalleryJavaScript.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -320,6 +321,7 @@
     <Content Include="Views\Shared\_LoggedinMenu.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_ThumbnailsAlbum.cshtml" />
+    <Content Include="Views\Photo\_AlbumDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -65,6 +65,14 @@ namespace MVCLabb.BI
             }
         }
 
+        internal static List<tbl_Photo> GetAllPhotoesInAlbumByID(string id)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Photo.Include("tbl_User").Include("tbl_Album").Include("tbl_Comment").Where(x => x.AlbumID.ToString() == id).ToList();
+            }
+        }
+
         internal static tbl_Photo GetPhotoFromDbById(Guid id)
         {
             using (var ctx = new MVCLabbEntities())
