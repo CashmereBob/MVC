@@ -27,6 +27,14 @@ namespace MVCLabb.BI
             return null;
         }
 
+        internal static List<tbl_User> GetAllUsers()
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_User.Include("tbl_Photo").Include("tbl_Album").Include("tbl_Comment").ToList();
+            }
+        }
+
         internal static tbl_User GetUser(string id)
         {
             using (var ctx = new MVCLabbEntities())

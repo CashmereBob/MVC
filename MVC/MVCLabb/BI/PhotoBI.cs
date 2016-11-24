@@ -24,11 +24,36 @@ namespace MVCLabb.BI
             return result;
         }
 
+        internal static tbl_Photo GetLastAddedInAlbum(tbl_Album album)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Photo.Include("tbl_User").Include("tbl_Album").Include("tbl_Comment").Where(x => x.AlbumID == album.Id).OrderByDescending(x => x.Date).FirstOrDefault();
+            }
+        }
+
         internal static List<tbl_Photo> GetPhotoFromDbByUserId(Guid userID)
         {
             using (var ctx = new MVCLabbEntities())
             {
-                return ctx.tbl_Photo.Where(x => x.UserID == userID).ToList();
+                return ctx.tbl_Photo.Include("tbl_User").Include("tbl_Album").Include("tbl_Comment").Where(x => x.UserID == userID).ToList();
+            }
+        }
+
+        internal static tbl_Photo GetLastAddedPhoto()
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Photo.Include("tbl_User").Include("tbl_Album").Include("tbl_Comment").OrderByDescending(x => x.Date).FirstOrDefault();
+            }
+        }
+
+        internal static List<tbl_Photo> GetSearchPhotosFromDb(string search)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Photo.Include("tbl_User").Include("tbl_Album").Include("tbl_Comment").Where(x =>
+                x.Name.Contains(search) || x.Description.Contains(search) || x.tbl_Album.Name.Contains(search)).ToList();
             }
         }
 
@@ -36,7 +61,7 @@ namespace MVCLabb.BI
         {
             using (var ctx = new MVCLabbEntities())
             {
-                return ctx.tbl_Photo.ToList();
+                return ctx.tbl_Photo.Include("tbl_User").Include("tbl_Album").Include("tbl_Comment").ToList();
             }
         }
 
@@ -48,9 +73,11 @@ namespace MVCLabb.BI
             }
         }
 
-        internal static void AddPhotoToDBAndFolder(tbl_Photo photoToDB, HttpPostedFileBase photoUpload)
+        internal static void AddPhotoToDB(tbl_Photo photoToDB)
         {
-            photoToDB.Path = $" /Photos/{photoUpload.FileName}";
+            
+
+            photoToDB.AlbumID = photoToDB.AlbumID == Guid.Empty ? null : photoToDB.AlbumID;
 
             using (var ctx = new MVCLabbEntities())
             {
@@ -64,6 +91,8 @@ namespace MVCLabb.BI
 
         internal static void UdaptePhoto(tbl_Photo photo)
         {
+
+            photo.AlbumID = photo.AlbumID == Guid.Empty ? null : photo.AlbumID;
             using (var ctx = new MVCLabbEntities())
             {
                 var photoFromDb = ctx.tbl_Photo.FirstOrDefault(x => x.Id == photo.Id);

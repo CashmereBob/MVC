@@ -1,0 +1,16 @@
+﻿@model IEnumerable<MVCLabb.Models.AlbumViewModel>
+
+@foreach (var item in Model)
+{
+
+    <div class="col-xs-12 col-sm-6 col-md-4 masonaryitem">
+        <div class="thumbnail">
+            <img src="@item.LastAdded.Path" alt="...">
+            <div class="caption">
+                <h3>@item.Name</h3>
+                <p>@item.Description</p>
+                <p><a href="#" data-imageId="@item.Id" class="btn btn-primary" role="button">View</a>
+            </div>
+        </div>
+    </div>
+}

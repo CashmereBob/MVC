@@ -1,21 +1,51 @@
-﻿@model IEnumerable<MVCLabb.Models.IndexPhotoViewModel>
+﻿@model MVCLabb.Models.IndexViewModel
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-
-@section LatestUpload {
-    <div class="row">
-        <h3>Latest upload</h3>
-
-        @foreach (var item in Model)
-        {
-            @Html.Partial("_Thumbnails", item)
-        }
-
+<div class="row jumbotron">
+    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+        <div>
+            <p style="font-size: 80px;">@Model.Photoes</p>
+            <div class="caption">
+                <h3>Uploaded Photos</h3>
+            </div>
+        </div>
     </div>
-    <hr />
-}
+    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+        <div>
+            <p style="font-size: 80px;">@Model.Albums</p>
+            <div class="caption">
+                <h3>Created Albums</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+        <div>
+            <p style="font-size: 80px;">@Model.Users</p>
+            <div class="caption">
+                <h3>Registerd Users</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+        <div>
+            <p style="font-size: 80px;">@Model.Comments</p>
+            <div class="caption">
+                <h3>Added Comments</h3>
+            </div>
+        </div>
+    </div>
+    </div>
+<div class="row">
+    <div class="col-sx-12 text-center">
+        <div class="thumbnail">
+            <div class="caption">
+                <img src="@Model.Latest.Path" alt="..." style="max-width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+
+

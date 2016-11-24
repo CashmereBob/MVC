@@ -4,14 +4,26 @@
     ViewBag.Title = "Index";
 }
 
-<h2>The Gallery</h2>
+<div class="row" style="padding: 2% 1.5% 1% 1.5%;">
+    <div class="col-xs-12">
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+            <input id="search" type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1" style="max-width: 100%;">
+        </div>
+    </div>
+</div>
+<div class="row" style="padding: 0 1.5% 2% 1.5%;">
+    <div class="col-xs-12">
+        <div class="btn-group" role="group" aria-label="..." style="width: 100%;">
+            <button id="photoButton" type="button" class="btn btn-primary active" style="width: 50%;">Photos</button>
+            <button id="albumButton" type="button" class="btn btn-primary" style="width: 50%;">Albums</button>
+        </div>
+    </div>
+</div>
 
 <div id="masonarycontainer" class="row">
 
-    @foreach (var item in Model)
-            {
-        @Html.Partial("_Thumbnails", item)
-    }
+    @Html.Partial("_Thumbnails", Model)
 
 </div>
 
@@ -21,7 +33,7 @@
 
 
 @section Scripts {
-
     <script src="~/Scripts/MasonaryJavaScript.js"></script>
-
+    <script src="~/Scripts/GalleryJavaScript.js"></script>
+    
 }

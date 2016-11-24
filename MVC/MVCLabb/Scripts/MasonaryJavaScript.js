@@ -6,22 +6,25 @@ $(window).resize(function () {
     whileOverfloed();
 });
 
+var container = $('#masonarycontainer');
+
 function isOverflowed() {
     
     var overflow = false;
 
-    $('#masonarycontainer').children('.masonaryitem').each(function () {
-        if ($('#masonarycontainer')[0].clientWidth < $(this).position().left) {
-            console.log("hej");
+    container.children('.masonaryitem').each(function () {
+        if (container[0].clientWidth < $(this).position().left || container[0].clientHeight < $(this).position().top) {
             overflow = true;
         }
     });
     return overflow;
 }
 function whileOverfloed() {
-    $('#masonarycontainer').height("80vh");
-        while (isOverflowed() === true) {
-            $('#masonarycontainer').height($('#masonarycontainer').height() + 50);
+    
+
+    container.height("90vh");
+    while (isOverflowed() === true) {
+            container.height(container.height() + 200);
             
         }   
 }

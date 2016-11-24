@@ -15,9 +15,6 @@ namespace MVCLabb.Areas.User.Models
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
-        public string Album { get; set; }
-
-        public string SelectedAlbumsId { get; set; }
         public ICollection <SelectListItem> Albums { get; set; }
         public Guid AlbumId { get; set; }
         public CreatePhotoViewModels()
@@ -50,14 +47,14 @@ namespace MVCLabb.Areas.User.Models
         public string Path { get; set; }
      
         public string Description { get; set; }
-        public ICollection<string> Albums { get; set; }
+        public ICollection<SelectListItem> Albums { get; set; }
         public Guid AlbumId { get; set; }
         public ICollection<CommentViewModel> Comments { get; set; }
 
         public EditPhotoViewModels()
         {
             Comments = new HashSet<CommentViewModel>();
-            Albums = new HashSet<string>();
+            Albums = new HashSet<SelectListItem>();
         }
 
     }

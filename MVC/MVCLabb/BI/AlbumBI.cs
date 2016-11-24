@@ -28,6 +28,14 @@ namespace MVCLabb.BI
             
         }
 
+        internal static List<tbl_Album> GettAllAlbums()
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Album.Include("tbl_User").Include("tbl_Photo").ToList();
+            }
+        }
+
         internal static tbl_Album GetAlbumByID(Guid id)
         {
             using (var ctx = new MVCLabbEntities())
@@ -46,6 +54,15 @@ namespace MVCLabb.BI
                 albumDB.Description = album.Description;
 
                 ctx.SaveChanges();
+            }
+        }
+
+        internal static List<tbl_Album> GetSearchAlbumsFromDB(string search)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Album.Include("tbl_User").Include("tbl_Photo").Where(x =>
+                x.Name.Contains(search) || x.Description.Contains(search) || x.tbl_User.Name.Contains(search)).ToList();
             }
         }
 

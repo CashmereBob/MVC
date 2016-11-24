@@ -225,6 +225,7 @@
     <Content Include="Areas\User\Views\Album\Delete.cshtml" />
     <Content Include="Areas\User\Views\Comment\Delete.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\GalleryJavaScript.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
@@ -238,7 +239,6 @@
     <Content Include="Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Information.cshtml" />
     <Content Include="Views\Photo\Index.cshtml" />
     <Content Include="Views\Photo\Details.cshtml" />
@@ -284,11 +284,14 @@
     <Compile Include="BI\PhotoBI.cs" />
     <Compile Include="BI\UserBI.cs" />
     <Compile Include="HelperMethods\UserHelper.cs" />
+    <Compile Include="Mapper\AlbumMapper.cs" />
     <Compile Include="Mapper\CommentMapper.cs" />
     <Compile Include="Mapper\PhotoMapper.cs" />
     <Compile Include="Mapper\UserMapper.cs" />
+    <Compile Include="Models\AlbumViewModels.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tbl_Album.cs">
@@ -315,6 +318,8 @@
     <Content Include="Views\Auth\Registration.cshtml" />
     <Content Include="Views\Auth\Manage.cshtml" />
     <Content Include="Views\Shared\_LoggedinMenu.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_ThumbnailsAlbum.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

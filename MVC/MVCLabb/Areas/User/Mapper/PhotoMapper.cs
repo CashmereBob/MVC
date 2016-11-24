@@ -15,7 +15,9 @@ namespace MVCLabb.Areas.User.Mapper
             {
                 Id = photoFromDB.Id,
                 Path = photoFromDB.Path,
-                Name = photoFromDB.Name
+                Name = photoFromDB.Name,
+                Description = photoFromDB.Description,
+                Album = photoFromDB.AlbumID != null ? photoFromDB.tbl_Album.Name : "Uncatogorized"
             };
         }
 
@@ -25,6 +27,7 @@ namespace MVCLabb.Areas.User.Mapper
             {
                 Name = photo.Name,
                 Description = photo.Description,
+                AlbumID = photo.AlbumId != null ? photo.AlbumId : Guid.Empty
             };
         }
 
@@ -53,7 +56,7 @@ namespace MVCLabb.Areas.User.Mapper
                 Description = photo.Description,
                 Name = photo.Name,
                 Id = photo.Id,
-                AlbumID = photo.AlbumId
+                AlbumID = photo.AlbumId != null ? photo.AlbumId : Guid.Empty
             };
         }
 
@@ -65,6 +68,17 @@ namespace MVCLabb.Areas.User.Mapper
                 Id = model.Id,
                 Name = model.Name,
                 Path = model.Path
+            };
+        }
+
+        internal static CreatePhotoViewModels MapCreatePhotoViewModel(tbl_Photo photo)
+        {
+            return new CreatePhotoViewModels
+            {
+                Name = photo.Name,
+                Description = photo.Description,
+                AlbumId = photo.AlbumID != null ? (Guid)photo.AlbumID : Guid.Empty
+
             };
         }
     }

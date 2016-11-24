@@ -34,7 +34,7 @@ namespace MVCLabb.Areas.User.Controllers
         {
             var model = new CreatePhotoViewModels();
             var albums = AlbumBI.GettAllAlbumsByUserID(userID);
-            model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "0" });
+            model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
             albums.ForEach(x => model.Albums.Add(new SelectListItem {Text = x.Name, Value = x.Id.ToString() }));
 
             return View(model);
@@ -45,17 +45,26 @@ namespace MVCLabb.Areas.User.Controllers
         public ActionResult Create(CreatePhotoViewModels photo, HttpPostedFileBase photoUpload)
         {
             tbl_Photo photoToDB = PhotoMapper.MapCreatePhotoViewModel(photo);
-            photoToDB.UserID = UserHelper.GetLogedInUser().Id;
+            
             try
             {
-                PhotoBI.AddPhotoToDBAndFolder(photoToDB, photoUpload);
+                photoToDB.UserID = UserHelper.GetLogedInUser().Id;
+                photoToDB.Id = Guid.NewGuid();
+                photoToDB.Date = DateTime.Now;
+                photoToDB.Path = $" /Photos/{photoUpload.FileName}";
+                PhotoBI.AddPhotoToDB(photoToDB);
 
                 photoUpload.SaveAs(Path.Combine(Server.MapPath("~/Photos"), photoUpload.FileName));
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View(photo);
+                var model = PhotoMapper.MapCreatePhotoViewModel(photoToDB);
+                var albums = AlbumBI.GettAllAlbumsByUserID(userID);
+                model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
+                albums.ForEach(x => model.Albums.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() }));
+
+                return View(model);
             }
         }
 
@@ -64,6 +73,9 @@ namespace MVCLabb.Areas.User.Controllers
         {
             tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapEditPhotoViewModel(model);
+            var albums = AlbumBI.GettAllAlbumsByUserID(userID);
+            photo.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
+            albums.ForEach(x => photo.Albums.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() }));
 
             if (model.UserID == userID)
                 return View(photo);

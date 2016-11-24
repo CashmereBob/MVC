@@ -37,4 +37,13 @@ namespace MVCLabb.Models
         public string Album { get; set; }
 
     }
+
+    public class IndexViewModel
+    {
+        public int Photoes { get; set; }
+        public int Users { get; set; }
+        public int Comments { get; set; }
+        public int Albums { get; set; }
+        public IndexPhotoViewModel Latest { get; set; }
+    }
 }

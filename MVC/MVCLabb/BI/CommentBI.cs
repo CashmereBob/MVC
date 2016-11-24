@@ -25,6 +25,14 @@ namespace MVCLabb.BI
             }
         }
 
+        internal static List<tbl_Comment> GetAllComments()
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                return ctx.tbl_Comment.Include("tbl_User").Include("tbl_Photo").ToList();
+            }
+        }
+
         internal static void DeleteComment(tbl_Comment comment)
         {
             using (var ctx = new MVCLabbEntities())
