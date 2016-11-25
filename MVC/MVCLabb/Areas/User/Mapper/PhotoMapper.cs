@@ -17,6 +17,7 @@ namespace MVCLabb.Areas.User.Mapper
                 Path = photoFromDB.Path,
                 Name = photoFromDB.Name,
                 Description = photoFromDB.Description,
+                Comments = photoFromDB.tbl_Comment != null ? photoFromDB.tbl_Comment.Count() : 0,
                 Album = photoFromDB.AlbumID != null ? photoFromDB.tbl_Album.Name : "Uncatogorized"
             };
         }
@@ -38,6 +39,7 @@ namespace MVCLabb.Areas.User.Mapper
             photo.Name = model.Name;
             photo.Description = model.Description;
             photo.Path = model.Path;
+            photo.Id = model.Id;
 
             model.tbl_Comment.ToList().ForEach(x =>
             photo.Comments.Add(new CommentViewModel

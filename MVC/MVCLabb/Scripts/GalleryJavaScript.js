@@ -11,19 +11,21 @@ albumButton.click(function (e) {
     partial = "album";
     albumButton.addClass('active');
     photoButton.removeClass('active');
-    setPartial()
+    setPartial();
+    SetLinksToDetail();
 });
 
 photoButton.click(function (e) {
     partial = "photo";
     photoButton.addClass('active');
     albumButton.removeClass('active');
+    setPartial();
     SetLinksToDetail();
-    setPartial()
 });
 
 search.keyup(function (e) {
     setPartial();
+    SetLinksToDetail();
 });
 
 var model = {
@@ -45,7 +47,7 @@ function setPartial() {
             content.html("");
             $("#masonarycontainer").html(data);
             GoToAlbum();
-            
+            SetLinksToDetail();
             whileOverfloed();
         },
         contentType: "application/json; charset=utf-8",
@@ -59,8 +61,6 @@ function SetLinksToDetail() {
 
     $(".detailLink").each(function (e) {
         $(this).click(function (e) {
-
-     
 
             var model = {
                 id: ""
@@ -77,13 +77,11 @@ function SetLinksToDetail() {
                     $("#masonarycontainer").html("");
                     whileOverfloed();
                     LoadComentPhoto(model.id);
+                    
                 },
                 contentType: "application/json; charset=utf-8",
                 dataType: "text"
             });
-
-
-
 
         });
 
@@ -93,8 +91,8 @@ function SetLinksToDetail() {
 
 function LoadComentPhoto(id) {
 
-    var app = new Vue({
-        el: '#app',
+    var app2 = new Vue({
+        el: '#app2',
         data: {
             comments: {}
         }
@@ -106,23 +104,19 @@ function LoadComentPhoto(id) {
 
     photo.id = id;
 
-
-    $("#commentButton").click(function (e) {
-
         $.ajax({
             type: "GET",
             url: "/Photo/PhotoComments",
             data: photo,
             success: function (data) {
-                $("#inputField").show();
-                app.comments = data;
-                console.log(data.id);
+                app2.comments = data;
+               
             },
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         });
 
-    });
+
 
     $("#submit").click(function (e) {
 
@@ -142,9 +136,20 @@ function LoadComentPhoto(id) {
                 data: JSON.stringify(comm),
                 success: function (data) {
                     $("#inputField").show();
-                    app.comments = data;
-                    console.log(data.id);
-                    $("#actualComment").val("");
+                    app2.comments = data;
+                    
+                    $.ajax({
+                        type: "GET",
+                        url: "/Photo/PhotoComments",
+                        data: photo,
+                        success: function (data) {
+                            app2.comments = data;
+
+                        },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json"
+                    });
+
                 },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json"

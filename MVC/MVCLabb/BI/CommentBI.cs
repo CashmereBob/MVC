@@ -22,7 +22,7 @@ namespace MVCLabb.BI
         {
             using (var ctx = new MVCLabbEntities())
             {
-                return ctx.tbl_Photo.Include("tbl_Comment").Include("tbl_User").FirstOrDefault(x => x.Id.ToString() == id).tbl_Comment.ToList();
+                return ctx.tbl_Comment.Include("tbl_User").Include("tbl_Photo").Include("tbl_Album").Where(x => x.PhotoID.ToString() == id).ToList();
             }
         }
 
@@ -50,7 +50,7 @@ namespace MVCLabb.BI
         {
             using (var ctx = new MVCLabbEntities())
             {
-                return ctx.tbl_Comment.Include("tbl_User").Include("tbl_Photo").FirstOrDefault(x => x.Id == id);
+                return ctx.tbl_Comment.Include("tbl_User").Include("tbl_Photo").Include("tbl_Album").FirstOrDefault(x => x.Id == id);
             }
         }
 

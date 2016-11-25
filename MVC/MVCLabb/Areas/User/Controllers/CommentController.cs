@@ -24,6 +24,15 @@ namespace MVCLabb.Areas.User.Controllers
             return View(model);
         }
 
+        public ActionResult IndexAlbum(string id)
+        {
+            List<tbl_Comment> comments = CommentBI.GetAllComentsByAlbumID(id);
+            List<CommentViewModel> model = new List<CommentViewModel>();
+            comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
+
+            return View("Index", model);
+        }
+
         [HttpGet]
         public ActionResult Delete(CommentViewModel model)
         {
@@ -31,7 +40,11 @@ namespace MVCLabb.Areas.User.Controllers
 
             model = CommentMapper.MapCommentViewModel(comment);
 
-            if (comment.tbl_Photo.UserID == userID)
+
+            var photoid = comment.tbl_Photo != null ? comment.tbl_Photo.UserID : Guid.Empty;
+            var albumid = comment.tbl_Album != null ? comment.tbl_Album.UserID : Guid.Empty;
+
+            if (photoid == userID || albumid == userID)
             {
                 return View(model);
             }

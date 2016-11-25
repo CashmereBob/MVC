@@ -15,17 +15,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var model = new IndexViewModel()
-            {
-                Users = UserBI.GetAllUsers().Count(),
-                Albums = AlbumBI.GettAllAlbums().Count(),
-                Comments = CommentBI.GetAllComments().Count(),
-                Photoes = PhotoBI.GetAllPhotosFromDb().Count(),
-                Latest = PhotoMapper.MapIndexPhotoViewModel(PhotoBI.GetLastAddedPhoto())
-            };
-
-
-            return View(model);
+            return View();
         }
         [AllowAnonymous]
         public ActionResult Information()
@@ -57,6 +47,23 @@ namespace MVCLabb.Controllers
                 albumsFromDB.ForEach(x => albums.Add(AlbumMapper.MapAlbumViewModel(x)));
                 return PartialView("_thumbnailsAlbum", albums);
             }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Data()
+        {
+          
+            var model = new DataViewModel()
+            {
+                users = UserBI.GetAllUsers().Count().ToString(),
+                albums = AlbumBI.GettAllAlbums().Count().ToString(),
+                comments = CommentBI.GetAllComments().Count().ToString(),
+                photos = PhotoBI.GetAllPhotosFromDb().Count().ToString(),
+                latest = PhotoMapper.MapIndexPhotoViewModel(PhotoBI.GetLastAddedPhoto()).Path
+            };
+
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
     }
 }

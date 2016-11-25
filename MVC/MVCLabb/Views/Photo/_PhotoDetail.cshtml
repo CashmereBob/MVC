@@ -1,6 +1,6 @@
 ﻿@model MVCLabb.Models.DetailsPhotoViewModel
 
-<div class="row" style="padding: 20px;">
+<div id="app2" class="row" style="padding: 20px;">
     <div class="col-sm-12 col-md-6">
         <img src="@Model.Path" class="img-thumbnail" style="max-width: 100%;" />
     </div>
@@ -19,11 +19,12 @@
         }
         <hr />
         
-        <ol id="list" style="padding: 0; margin: 0;">
+        <ol id="list" style="padding: 0; margin: 0; list-style-type: none;">
             <li v-for="commentn in comments">
                 <h3>{{ commentn.name }}</h3>
                 <p>{{ commentn.comment }}</p>
                 <i>{{ commentn.email }} || {{ commentn.date }}</i>
+                <hr />
             </li>
         </ol>
 

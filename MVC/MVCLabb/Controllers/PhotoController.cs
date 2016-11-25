@@ -123,5 +123,48 @@ namespace MVCLabb.Controllers
 
 
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult PhotoComments(string id)
+        {
+            List<tbl_Comment> comments = CommentBI.GetAllComentsByPhotoID(id);
+            List<CommentViewModel> model = new List<CommentViewModel>();
+            comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
+
+
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult PhotoComments(string id, string comment)
+        {
+            Guid userID = UserHelper.GetLogedInUser().Id;
+
+            var comm = new tbl_Comment
+            {
+                PhotoID = new Guid(id),
+                Date = DateTime.Now,
+                Comment = comment,
+                Id = Guid.NewGuid(),
+                UserID = userID
+            };
+
+            CommentBI.AddComment(comm);
+
+            List<tbl_Comment> comments = CommentBI.GetAllComentsByAlbumID(id.ToString());
+            List<CommentViewModel> model = new List<CommentViewModel>();
+            comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
+
+
+
+            return Json(model);
+
+
+        }
     }
 }

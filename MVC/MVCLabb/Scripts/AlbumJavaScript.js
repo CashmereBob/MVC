@@ -1,4 +1,6 @@
 ﻿
+
+
 function GoToAlbum(){
 $(".albumButton").each(function (e) {
     
@@ -18,6 +20,7 @@ $(".albumButton").each(function (e) {
                 content.html(data);
                 AddPhotoes(model.id);
                 LoadComent(model.id);
+                
             },
             contentType: "application/json; charset=utf-8",
             dataType: "text"
@@ -42,6 +45,7 @@ function AddPhotoes(id) {
         success: function (data) {
             $("#masonarycontainer").html(data);
             whileOverfloed();
+            SetLinksToDetail();
         },
         contentType: "application/json; charset=utf-8",
         dataType: "text"
@@ -51,7 +55,7 @@ function AddPhotoes(id) {
 }
 
 function LoadComent(id) {
-
+    
     $("#inputField").hide();
     $("#closeButton").hide();
 
@@ -132,5 +136,9 @@ function LoadComent(id) {
 
     });
 }
+
+
+
+
 
 

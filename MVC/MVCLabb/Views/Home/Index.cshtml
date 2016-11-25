@@ -1,51 +1,87 @@
-﻿@model MVCLabb.Models.IndexViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
-
-<div class="row jumbotron">
-    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-        <div>
-            <p style="font-size: 80px;">@Model.Photoes</p>
-            <div class="caption">
-                <h3>Uploaded Photos</h3>
+<div id="app">
+    <div class="row jumbotron">
+        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+            <div>
+                <p style="font-size: 80px;">{{photos}}</p>
+                <div class="caption">
+                    <h3>Uploaded Photos</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+            <div>
+                <p style="font-size: 80px;">{{albums}}</p>
+                <div class="caption">
+                    <h3>Created Albums</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+            <div>
+                <p style="font-size: 80px;">{{users}}</p>
+                <div class="caption">
+                    <h3>Registerd Users</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+            <div>
+                <p style="font-size: 80px;">{{comments}}</p>
+                <div class="caption">
+                    <h3>Added Comments</h3>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-        <div>
-            <p style="font-size: 80px;">@Model.Albums</p>
-            <div class="caption">
-                <h3>Created Albums</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-        <div>
-            <p style="font-size: 80px;">@Model.Users</p>
-            <div class="caption">
-                <h3>Registerd Users</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-        <div>
-            <p style="font-size: 80px;">@Model.Comments</p>
-            <div class="caption">
-                <h3>Added Comments</h3>
-            </div>
-        </div>
-    </div>
-    </div>
-<div class="row">
-    <div class="col-sx-12 text-center">
-        <div class="thumbnail">
-            <div class="caption">
-                <img src="@Model.Latest.Path" alt="..." style="max-width: 100%;">
+    <div class="row">
+        <div class="col-sx-12 text-center">
+            <div class="thumbnail">
+                <div class="caption">
+                    <img v-bind:src="latest" alt="..." style="max-width: 100%;">
+                </div>
             </div>
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                photos: "",
+                albums: "",
+                users: "",
+                comments: "",
+                latest: ""
+            }
+        });
 
+        function GetData() {
 
+            $.ajax({
+                type: "GET",
+                url: "/Home/Data",
+                success: function (data) {
+                    app.photos = data.photos,
+                    app.albums = data.albums,
+                    app.users = data.users,
+                    app.comments = data.comments,
+                    app.latest = data.latest
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+
+        }
+
+        $(document).ready(function (e) { GetData(); });
+    
+        
+        setInterval(function () { GetData(); }, 5000);
+
+    </script>
+
+}
