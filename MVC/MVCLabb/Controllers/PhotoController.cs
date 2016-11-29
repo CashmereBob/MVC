@@ -5,7 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using MVCLabb.Mapper;
 using MVCLabb.HelperMethods;
 
@@ -13,13 +14,25 @@ namespace MVCLabb.Controllers
 {
     public class PhotoController : Controller
     {
-        
 
+        IUserRepository userRepository;
+        IPhotoRepository photoRepository;
+        IAlbumRepository albumRepository;
+        ICommentRepository commentRepository;
+
+        public PhotoController()
+        {
+            userRepository = new UserRepository();
+            photoRepository = new PhotoRepository();
+            albumRepository = new AlbumRepository();
+            commentRepository = new CommentRepository();
+
+        }
         // GET: Photo
         [AllowAnonymous]
         public ActionResult Index()
         {
-            List<tbl_Photo> photosFromDB = PhotoBI.GetAllPhotosFromDb();
+            List<Photo> photosFromDB = photoRepository.GetAllPhotosFromDb();
             List<IndexPhotoViewModel> photos = new List<IndexPhotoViewModel>();
             photosFromDB.ForEach(x => photos.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
 
@@ -32,7 +45,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult Details(DetailsPhotoViewModel photo)
         {
-            tbl_Photo photoFromDB = PhotoBI.GetPhotoFromDbById(photo.Id);
+            Photo photoFromDB = photoRepository.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapDetailsPhotoViewModel(photoFromDB);
 
             return PartialView("_PhotoDetail", photo);
@@ -42,17 +55,17 @@ namespace MVCLabb.Controllers
         [Authorize]
         public ActionResult Details(DetailsPhotoViewModel photo, FormCollection collection)
         {
-            var comment = new tbl_Comment
+            var comment = new Comment
             {
                 Date = DateTime.Now,
-                Comment = collection["comment"],
-                UserID = UserHelper.GetLogedInUser().Id,
+                Content = collection["comment"],
+                UserID = UserHelper.GetLogedInUser(userRepository).Id,
                 PhotoID = photo.Id
             };
 
-            CommentBI.AddComment(comment);
+            commentRepository.AddComment(comment);
 
-            tbl_Photo photoFromDB = PhotoBI.GetPhotoFromDbById(photo.Id);
+            Photo photoFromDB = photoRepository.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapDetailsPhotoViewModel(photoFromDB);
 
             return View(photo);
@@ -62,7 +75,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult AlbumDetails(string id)
         {
-            var album = AlbumBI.GetAlbumByID(id);
+            var album = albumRepository.GetAlbumByID(id);
             DetailAlbumViewModel model = AlbumMapper.MapDetailAlbumViewModel(album);
 
             return PartialView("_AlbumDetails", model);
@@ -74,7 +87,7 @@ namespace MVCLabb.Controllers
         {
 
             
-                List<tbl_Photo> photosFromDB = PhotoBI.GetAllPhotoesInAlbumByID(id);
+                List<Photo> photosFromDB = photoRepository.GetAllPhotoesInAlbumByID(id);
                 List<IndexPhotoViewModel> photos = new List<IndexPhotoViewModel>();
                 photosFromDB.ForEach(x => photos.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
                 return PartialView("_thumbnails", photos);
@@ -86,7 +99,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult AlbumComments(string id)
         {
-            List<tbl_Comment> comments = CommentBI.GetAllComentsByAlbumID(id);
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id);
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -101,19 +114,19 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult AlbumComments(string id, string comment)
         {
-            Guid userID = UserHelper.GetLogedInUser().Id;
+            Guid userID = UserHelper.GetLogedInUser(userRepository).Id;
 
-            var comm = new tbl_Comment {
+            var comm = new Comment {
                 AlbumID = new Guid(id),
                 Date = DateTime.Now,
-                Comment = comment,
+                Content = comment,
                 Id = Guid.NewGuid(),
                 UserID = userID
             };
 
-            CommentBI.AddComment(comm);
+            commentRepository.AddComment(comm);
 
-            List<tbl_Comment> comments = CommentBI.GetAllComentsByAlbumID(id.ToString());
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString());
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -128,7 +141,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult PhotoComments(string id)
         {
-            List<tbl_Comment> comments = CommentBI.GetAllComentsByPhotoID(id);
+            List<Comment> comments = commentRepository.GetAllComentsByPhotoID(id);
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -143,20 +156,20 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult PhotoComments(string id, string comment)
         {
-            Guid userID = UserHelper.GetLogedInUser().Id;
+            Guid userID = UserHelper.GetLogedInUser(userRepository).Id;
 
-            var comm = new tbl_Comment
+            var comm = new Comment
             {
                 PhotoID = new Guid(id),
                 Date = DateTime.Now,
-                Comment = comment,
+                Content = comment,
                 Id = Guid.NewGuid(),
                 UserID = userID
             };
 
-            CommentBI.AddComment(comm);
+            commentRepository.AddComment(comm);
 
-            List<tbl_Comment> comments = CommentBI.GetAllComentsByAlbumID(id.ToString());
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString());
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 

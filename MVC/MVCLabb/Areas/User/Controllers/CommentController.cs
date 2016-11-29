@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MVCLabb.Models;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using MVCLabb.HelperMethods;
 using MVCLabb.Mapper;
 
@@ -13,11 +14,22 @@ namespace MVCLabb.Areas.User.Controllers
     [Authorize(Roles = "User")]
     public class CommentController : Controller
     {
-        Guid userID = UserHelper.GetLogedInUser().Id;
+        Guid userID;
+        IUserRepository userRepository;
+        ICommentRepository commentRepository;
+
+        public CommentController()
+        {
+            userRepository = new UserRepository();
+            commentRepository = new CommentRepository();
+            userID = UserHelper.GetLogedInUser(userRepository).Id;
+
+        }
+
         // GET: User/Comment
         public ActionResult Index(string id)
         {
-            List<tbl_Comment> comments = CommentBI.GetAllComentsByPhotoID(id);
+            List<Comment> comments = commentRepository.GetAllComentsByPhotoID(id);
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -26,7 +38,7 @@ namespace MVCLabb.Areas.User.Controllers
 
         public ActionResult IndexAlbum(string id)
         {
-            List<tbl_Comment> comments = CommentBI.GetAllComentsByAlbumID(id);
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id);
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -36,13 +48,13 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpGet]
         public ActionResult Delete(CommentViewModel model)
         {
-            tbl_Comment comment = CommentBI.GetCommentByID(model.id);
+            Comment comment = commentRepository.GetCommentByID(model.id);
 
             model = CommentMapper.MapCommentViewModel(comment);
 
 
-            var photoid = comment.tbl_Photo != null ? comment.tbl_Photo.UserID : Guid.Empty;
-            var albumid = comment.tbl_Album != null ? comment.tbl_Album.UserID : Guid.Empty;
+            var photoid = comment.Photo != null ? comment.Photo.UserID : Guid.Empty;
+            var albumid = comment.Album != null ? comment.Album.UserID : Guid.Empty;
 
             if (photoid == userID || albumid == userID)
             {
@@ -55,9 +67,9 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpPost]
         public ActionResult Delete(CommentViewModel model, FormCollection collection)
         {
-            var comment = CommentBI.GetCommentByID(model.id);
+            var comment = commentRepository.GetCommentByID(model.id);
 
-            CommentBI.DeleteComment(comment);
+            commentRepository.DeleteComment(comment);
 
             return RedirectToAction("Index", new { id=comment.PhotoID });
 

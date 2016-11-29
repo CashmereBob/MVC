@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MVCLabb.Models;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 
 namespace MVCLabb.Mapper
 {
     public class UserMapper
     {
-        internal static tbl_User MapRegistrationViewModel(RegistrationViewModel model)
+        internal static User MapRegistrationViewModel(RegistrationViewModel model)
         {
-            return new tbl_User
+            return new User
             {
                 Id = Guid.NewGuid(),
                 Email = model.Email,
@@ -21,7 +22,7 @@ namespace MVCLabb.Mapper
             };
         }
 
-        internal static ManageViewModel MapManageViewModel(tbl_User user)
+        internal static ManageViewModel MapManageViewModel(User user, IUserRepository UserBI)
         {
             user = UserBI.GetUser(user.Id.ToString());
 
@@ -36,9 +37,9 @@ namespace MVCLabb.Mapper
 
         }
 
-        internal static tbl_User MapManageViewModel(ManageViewModel model)
+        internal static User MapManageViewModel(ManageViewModel model)
         {
-            return new tbl_User
+            return new User
             {
                 Name = model.Name,
                 Email = model.Email,

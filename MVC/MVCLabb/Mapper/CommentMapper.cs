@@ -3,35 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MVCLabb.Models;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 
 namespace MVCLabb.Mapper
 {
     public class CommentMapper
     {
-        internal static CommentViewModel MapCommentViewModel(tbl_Comment comment)
+        internal static CommentViewModel MapCommentViewModel(Comment comment)
         {
             return new CommentViewModel
             {
                 id = comment.Id,
-                comment = comment.Comment,
+                comment = comment.Content,
                 date = comment.Date,
-                email = comment.tbl_User.Email,
-                name = comment.tbl_User.Name
+                email = comment.User.Email,
+                name = comment.User.Name
             };
         }
 
-        internal static tbl_Comment MapCommentViewModel(CommentViewModel comment)
+        internal static Comment MapCommentViewModel(CommentViewModel comment)
         {
-            return new tbl_Comment
+            return new Comment
             {
                 Id = comment.id,
-                Comment = comment.comment,
+                Content = comment.comment,
                 Date = comment.date,
                 UserID = comment.userID
             };
         }
 
-        internal static ICollection<CommentViewModel> MapCommentViewModel(ICollection<tbl_Comment> comments)
+        internal static ICollection<CommentViewModel> MapCommentViewModel(ICollection<Comment> comments)
         {
             var result = new List<CommentViewModel>();
 

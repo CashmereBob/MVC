@@ -185,16 +185,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\GalleryStyle.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="DataBaseModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DataBaseModel.edmx</DependentUpon>
-      <LastGenOutput>DataBaseModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataBaseModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DataBaseModel.edmx</DependentUpon>
-      <LastGenOutput>DataBaseModel.cs</LastGenOutput>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -206,13 +196,6 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\Admin\Views\web.config" />
-    <EntityDeploy Include="DataBaseModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DataBaseModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="DataBaseModel.edmx.diagram">
-      <DependentUpon>DataBaseModel.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\User\Views\web.config" />
     <Content Include="Areas\User\Views\Photo\Create.cshtml" />
     <Content Include="Areas\User\Views\Photo\Delete.cshtml" />
@@ -235,6 +218,11 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\MasonaryJavaScript.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
@@ -259,31 +247,12 @@
     <Compile Include="Areas\User\Models\AlbumViewModels.cs" />
     <Compile Include="Areas\User\Models\PhotoViewModels.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
-    <Compile Include="BI\AlbumBI.cs" />
-    <Compile Include="BI\CommentBI.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
-    <Compile Include="DataBaseModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataBaseModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataBaseModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataBaseModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataBaseModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataBaseModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="BI\PhotoBI.cs" />
-    <Compile Include="BI\UserBI.cs" />
     <Compile Include="HelperMethods\UserHelper.cs" />
     <Compile Include="Mapper\AlbumMapper.cs" />
     <Compile Include="Mapper\CommentMapper.cs" />
@@ -295,18 +264,6 @@
     <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="tbl_Album.cs">
-      <DependentUpon>DataBaseModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tbl_Comment.cs">
-      <DependentUpon>DataBaseModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tbl_Photo.cs">
-      <DependentUpon>DataBaseModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tbl_User.cs">
-      <DependentUpon>DataBaseModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -340,6 +297,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MVCLabb.Data\MVCLabb.Data.csproj">
+      <Project>{8d4491c5-80e1-4d1f-9990-465266b65beb}</Project>
+      <Name>MVCLabb.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

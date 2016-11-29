@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MVCLabb.Models;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 
 namespace MVCLabb.Mapper
 {
     public class PhotoMapper
     {
-        internal static DetailsPhotoViewModel MapDetailsPhotoViewModel(tbl_Photo photoFromDB)
+        internal static DetailsPhotoViewModel MapDetailsPhotoViewModel(Photo photoFromDB)
         {
             var photo = new DetailsPhotoViewModel();
 
@@ -17,31 +18,31 @@ namespace MVCLabb.Mapper
             photo.Description = photoFromDB.Description;
             photo.Path = photoFromDB.Path;
             photo.Date = photoFromDB.Date;
-            photo.UploaderName = photoFromDB.tbl_User.Name;
-            photo.Album = photoFromDB.AlbumID != null ? photoFromDB.tbl_Album.Name : "Uncategorized";
+            photo.UploaderName = photoFromDB.User.Name;
+            photo.Album = photoFromDB.AlbumID != null ? photoFromDB.Album.Name : "Uncategorized";
 
-            photoFromDB.tbl_Comment.ToList().ForEach(x =>
+            photoFromDB.Comments.ToList().ForEach(x =>
             photo.Comments.Add(new CommentViewModel
             {
                 id = x.Id,
-                email = x.tbl_User.Email,
-                name = x.tbl_User.Name,
+                email = x.User.Email,
+                name = x.User.Name,
                 date = x.Date,
-                comment = x.Comment
+                comment = x.Content
             }));
 
             return photo;
             
         }
 
-        internal static ICollection<IndexPhotoViewModel> MapIndexPhotoViewModel(ICollection<tbl_Photo> photos)
+        internal static ICollection<IndexPhotoViewModel> MapIndexPhotoViewModel(ICollection<Photo> photos)
         {
             var result = new List<IndexPhotoViewModel>();
             photos.ToList().ForEach(x => result.Add(MapIndexPhotoViewModel(x)));
             return result;
         }
 
-        internal static IndexPhotoViewModel MapIndexPhotoViewModel(tbl_Photo photoFromDB)
+        internal static IndexPhotoViewModel MapIndexPhotoViewModel(Photo photoFromDB)
         {
             return new IndexPhotoViewModel
             {
@@ -53,7 +54,7 @@ namespace MVCLabb.Mapper
            
         }
 
-        internal static tbl_Photo MapDetailsPhotoViewModel(DetailsPhotoViewModel photoView)
+        internal static Photo MapDetailsPhotoViewModel(DetailsPhotoViewModel photoView, IPhotoRepository PhotoBI)
         {
             var photo = PhotoBI.GetPhotoFromDbById(photoView.Id);
 
@@ -62,8 +63,8 @@ namespace MVCLabb.Mapper
             photo.Path = photoView.Path;
 
             photoView.Comments.ToList().ForEach(x => 
-            photo.tbl_Comment.Add(new tbl_Comment {
-                Comment = x.comment,
+            photo.Comments.Add(new Comment {
+                Content = x.comment,
                 Date = x.date,
                 UserID = x.userID
             }));

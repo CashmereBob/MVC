@@ -1,6 +1,7 @@
 ﻿using MVCLabb.Areas.User.Models;
 using MVCLabb.Areas.User.Mapper;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,27 @@ using MVCLabb.HelperMethods;
 
 namespace MVCLabb.Areas.User.Controllers
 {
+
+
     [Authorize(Roles = "User")]
     public class AlbumController : Controller
     {
-        Guid userID = UserHelper.GetLogedInUser().Id;
+        IUserRepository userRepository;
+        IAlbumRepository albumRepository;
+        Guid userID; 
+
+        public AlbumController()
+        {
+            userRepository = new UserRepository();
+            albumRepository = new AlbumRepository();
+            userID = UserHelper.GetLogedInUser(userRepository).Id;
+
+        }
+
         public ActionResult Index()
         {
 
-            List<tbl_Album> albumsDB = AlbumBI.GettAllAlbumsByUserID(userID);
+            List<Album> albumsDB = albumRepository.GettAllAlbumsByUserID(userID);
             List<ListAlbumViewModel> albums = new List<ListAlbumViewModel>();
             albumsDB.ForEach(x => albums.Add(AlbumMapper.MapListAlbumViewModel(x)));
             return View(albums);
@@ -36,8 +50,8 @@ namespace MVCLabb.Areas.User.Controllers
         {
             if (ModelState.IsValid)
             {
-                tbl_Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
-                AlbumBI.AddAlbum(album);
+                Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
+                albumRepository.AddAlbum(album);
                
             }
             return RedirectToAction("Index");
@@ -47,7 +61,7 @@ namespace MVCLabb.Areas.User.Controllers
         public ActionResult Edit(EditAlbumViewModel model)
         {
 
-            tbl_Album album = AlbumBI.GetAlbumByID(model.Id);
+            Album album = albumRepository.GetAlbumByID(model.Id);
 
             model = AlbumMapper.MapEditAlbumViewModel(album);
 
@@ -64,9 +78,9 @@ namespace MVCLabb.Areas.User.Controllers
         {
             if (ModelState.IsValid)
             {
-                tbl_Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
+                Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
 
-                AlbumBI.UpdateAlbum(album);
+                albumRepository.UpdateAlbum(album);
                 
             }
             return RedirectToAction("Index");
@@ -75,7 +89,7 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpGet]
         public ActionResult Delete(EditAlbumViewModel model)
         {
-            tbl_Album album = AlbumBI.GetAlbumByID(model.Id);
+            Album album = albumRepository.GetAlbumByID(model.Id);
 
             model = AlbumMapper.MapEditAlbumViewModel(album);
 
@@ -90,8 +104,8 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpPost]
         public ActionResult Delete(EditAlbumViewModel model, FormCollection collection)
         {
-            tbl_Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
-            AlbumBI.DeleteAlbum(album);
+            Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
+            albumRepository.DeleteAlbum(album);
             return RedirectToAction("Index");
         }
     }

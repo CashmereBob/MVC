@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MVCLabb.Areas.User.Models;
+using MVCLabb.Data;
 
 namespace MVCLabb.Areas.User.Mapper
 {
     public class AlbumMapper
     {
-        internal static ListAlbumViewModel MapListAlbumViewModel(tbl_Album albums)
+        internal static ListAlbumViewModel MapListAlbumViewModel(Album albums)
         {
             return new ListAlbumViewModel
             {
                 Id = albums.Id,
                 Description = albums.Description,
                 Name = albums.Name,
-                Photos = albums.tbl_Photo.Count()
+                Photos = albums.Photos.Count()
             };
         }
 
-        internal static tbl_Album MapEditAlbumViewModel(EditAlbumViewModel model, Guid id)
+        internal static Album MapEditAlbumViewModel(EditAlbumViewModel model, Guid id)
         {
-            return new tbl_Album
+            return new Album
             {
                 Name = model.Name,
                 Description = model.Description,
@@ -30,7 +31,7 @@ namespace MVCLabb.Areas.User.Mapper
             };
         }
 
-        internal static EditAlbumViewModel MapEditAlbumViewModel(tbl_Album album)
+        internal static EditAlbumViewModel MapEditAlbumViewModel(Album album)
         {
             return new EditAlbumViewModel
             {

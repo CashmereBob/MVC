@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using MVCLabb.Models;
 using System.Security.Claims;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using MVCLabb.HelperMethods;
 using MVCLabb.Mapper;
 
@@ -13,6 +14,13 @@ namespace MVCLabb.Controllers
 {
     public class AuthController : Controller
     {
+        IUserRepository userRepository;
+
+        public AuthController()
+        {
+            userRepository = new UserRepository();
+        }
+
         // GET: Auth
         [AllowAnonymous]
         [HttpGet]
@@ -30,7 +38,7 @@ namespace MVCLabb.Controllers
                 return View(model);
             }
 
-            var user = UserBI.ValidateLogin(model.Email, model.Password);
+            var user = userRepository.ValidateLogin(model.Email, model.Password);
 
             if (user != null)
             {
@@ -43,7 +51,7 @@ namespace MVCLabb.Controllers
 
         }
 
-        private void SetUpAuthCookie(tbl_User user)
+        private void SetUpAuthCookie(User user)
         {
             var identity = new ClaimsIdentity(new[] {
                         new Claim(ClaimTypes.Name, user.Name),
@@ -82,8 +90,8 @@ namespace MVCLabb.Controllers
         {
             if (ModelState.IsValid)
             {
-                tbl_User user = UserMapper.MapRegistrationViewModel(model);
-                UserBI.AddUser(user);
+                User user = UserMapper.MapRegistrationViewModel(model);
+                userRepository.AddUser(user);
             }
             else
             {
@@ -96,11 +104,11 @@ namespace MVCLabb.Controllers
         [HttpGet]
         public ActionResult Manage()
         {
-            var user = UserHelper.GetLogedInUser();
+            var user = UserHelper.GetLogedInUser(userRepository);
 
             if (user != null)
             {
-                ManageViewModel model = UserMapper.MapManageViewModel(user);
+                ManageViewModel model = UserMapper.MapManageViewModel(user, userRepository);
                 return View(model);
             }
 
@@ -113,10 +121,10 @@ namespace MVCLabb.Controllers
             if (ModelState.IsValid)
             {
 
-                tbl_User user = UserMapper.MapManageViewModel(model);
-                user.Id = UserHelper.GetLogedInUser().Id;
+                User user = UserMapper.MapManageViewModel(model);
+                user.Id = UserHelper.GetLogedInUser(userRepository).Id;
 
-                UserBI.UpdateUser(user);
+                userRepository.UpdateUser(user);
 
             }
             else

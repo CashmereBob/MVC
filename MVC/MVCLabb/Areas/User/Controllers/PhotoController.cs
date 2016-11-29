@@ -6,7 +6,8 @@ using System.Web.Mvc;
 using MVCLabb.Areas.User.Models;
 using MVCLabb.Controllers;
 using System.IO;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using MVCLabb.HelperMethods;
 using MVCLabb.Areas.User.Mapper;
 
@@ -15,12 +16,23 @@ namespace MVCLabb.Areas.User.Controllers
     [Authorize(Roles = "User")]
     public class PhotoController : Controller
     {
-        Guid userID = UserHelper.GetLogedInUser().Id;
+        Guid userID;
+        IUserRepository userRepository;
+        IPhotoRepository photoRepository;
+        IAlbumRepository albumRepository;
 
+        public PhotoController()
+        {
+            userRepository = new UserRepository();
+            photoRepository = new PhotoRepository();
+            albumRepository = new AlbumRepository();
+            userID = UserHelper.GetLogedInUser(userRepository).Id;
+
+        }
         // GET: User/Edit
         public ActionResult Index()
         {
-            List<tbl_Photo> photosFromDB = PhotoBI.GetPhotoFromDbByUserId(userID);
+            List<Photo> photosFromDB = photoRepository.GetPhotoFromDbByUserId(userID);
             ICollection<IndexPhotoViewModels> model = new List<IndexPhotoViewModels>();
             photosFromDB.ForEach(x => model.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
 
@@ -33,7 +45,7 @@ namespace MVCLabb.Areas.User.Controllers
         public ActionResult Create()
         {
             var model = new CreatePhotoViewModels();
-            var albums = AlbumBI.GettAllAlbumsByUserID(userID);
+            var albums = albumRepository.GettAllAlbumsByUserID(userID);
             model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
             albums.ForEach(x => model.Albums.Add(new SelectListItem {Text = x.Name, Value = x.Id.ToString() }));
 
@@ -44,15 +56,15 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpPost]
         public ActionResult Create(CreatePhotoViewModels photo, HttpPostedFileBase photoUpload)
         {
-            tbl_Photo photoToDB = PhotoMapper.MapCreatePhotoViewModel(photo);
+            Photo photoToDB = PhotoMapper.MapCreatePhotoViewModel(photo);
             
             try
             {
-                photoToDB.UserID = UserHelper.GetLogedInUser().Id;
+                photoToDB.UserID = userID;
                 photoToDB.Id = Guid.NewGuid();
                 photoToDB.Date = DateTime.Now;
                 photoToDB.Path = $" /Photos/{photoUpload.FileName}";
-                PhotoBI.AddPhotoToDB(photoToDB);
+                photoRepository.AddPhotoToDB(photoToDB);
 
                 photoUpload.SaveAs(Path.Combine(Server.MapPath("~/Photos"), photoUpload.FileName));
                 return RedirectToAction("Index");
@@ -60,7 +72,7 @@ namespace MVCLabb.Areas.User.Controllers
             catch
             {
                 var model = PhotoMapper.MapCreatePhotoViewModel(photoToDB);
-                var albums = AlbumBI.GettAllAlbumsByUserID(userID);
+                var albums = albumRepository.GettAllAlbumsByUserID(userID);
                 model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
                 albums.ForEach(x => model.Albums.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() }));
 
@@ -71,9 +83,9 @@ namespace MVCLabb.Areas.User.Controllers
         // GET: User/Edit/Edit/5
         public ActionResult Edit(EditPhotoViewModels photo)
         {
-            tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
+            Photo model = photoRepository.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapEditPhotoViewModel(model);
-            var albums = AlbumBI.GettAllAlbumsByUserID(userID);
+            var albums = albumRepository.GettAllAlbumsByUserID(userID);
             photo.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
             albums.ForEach(x => photo.Albums.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() }));
 
@@ -88,11 +100,11 @@ namespace MVCLabb.Areas.User.Controllers
         [HttpPost]
         public ActionResult Edit(EditPhotoViewModels photo, FormCollection collection)
         {
-            tbl_Photo model = PhotoMapper.MapEditPhotoViewModel(photo);
+            Photo model = PhotoMapper.MapEditPhotoViewModel(photo);
 
             try
             {
-                PhotoBI.UdaptePhoto(model);
+                photoRepository.UdaptePhoto(model);
                 return RedirectToAction("Index");
             }
             catch
@@ -104,7 +116,7 @@ namespace MVCLabb.Areas.User.Controllers
         // GET: User/Edit/Delete/5
         public ActionResult Delete(DeletePhotoViewModels photo)
         {
-            tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
+            Photo model = photoRepository.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapDeletePhotoViewModel(model);
 
             if (model.UserID == userID)
@@ -123,10 +135,10 @@ namespace MVCLabb.Areas.User.Controllers
         {
             try
             {
-                tbl_Photo model = PhotoBI.GetPhotoFromDbById(photo.Id);
+                Photo model = photoRepository.GetPhotoFromDbById(photo.Id);
                 if (model.UserID == userID)
-                { 
-                PhotoBI.DeletePhotoFromDB(model);
+                {
+                photoRepository.DeletePhotoFromDB(model);
 
                 string fullPath = Request.MapPath(model.Path);
 

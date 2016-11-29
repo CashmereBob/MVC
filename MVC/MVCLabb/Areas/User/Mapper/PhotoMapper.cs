@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 using MVCLabb.Areas.User.Models;
 using MVCLabb.Models;
+using MVCLabb.Data;
 
 namespace MVCLabb.Areas.User.Mapper
 {
     public class PhotoMapper
     {
-        internal static IndexPhotoViewModels MapIndexPhotoViewModel(tbl_Photo photoFromDB)
+        internal static IndexPhotoViewModels MapIndexPhotoViewModel(Photo photoFromDB)
         {
             return new IndexPhotoViewModels
             {
@@ -17,14 +18,14 @@ namespace MVCLabb.Areas.User.Mapper
                 Path = photoFromDB.Path,
                 Name = photoFromDB.Name,
                 Description = photoFromDB.Description,
-                Comments = photoFromDB.tbl_Comment != null ? photoFromDB.tbl_Comment.Count() : 0,
-                Album = photoFromDB.AlbumID != null ? photoFromDB.tbl_Album.Name : "Uncatogorized"
+                Comments = photoFromDB.Comments != null ? photoFromDB.Comments.Count() : 0,
+                Album = photoFromDB.AlbumID != null ? photoFromDB.Album.Name : "Uncatogorized"
             };
         }
 
-        internal static tbl_Photo MapCreatePhotoViewModel(CreatePhotoViewModels photo)
+        internal static Photo MapCreatePhotoViewModel(CreatePhotoViewModels photo)
         {
-            return new tbl_Photo
+            return new Photo
             {
                 Name = photo.Name,
                 Description = photo.Description,
@@ -32,7 +33,7 @@ namespace MVCLabb.Areas.User.Mapper
             };
         }
 
-        internal static EditPhotoViewModels MapEditPhotoViewModel(tbl_Photo model)
+        internal static EditPhotoViewModels MapEditPhotoViewModel(Photo model)
         {
             var photo = new EditPhotoViewModels();
 
@@ -41,19 +42,19 @@ namespace MVCLabb.Areas.User.Mapper
             photo.Path = model.Path;
             photo.Id = model.Id;
 
-            model.tbl_Comment.ToList().ForEach(x =>
+            model.Comments.ToList().ForEach(x =>
             photo.Comments.Add(new CommentViewModel
             {
                 id = x.Id,
-                comment = x.Comment
+                comment = x.Content
             }));
 
             return photo;
         }
 
-        internal static tbl_Photo MapEditPhotoViewModel(EditPhotoViewModels photo)
+        internal static Photo MapEditPhotoViewModel(EditPhotoViewModels photo)
         {
-            return new tbl_Photo
+            return new Photo
             {
                 Description = photo.Description,
                 Name = photo.Name,
@@ -62,7 +63,7 @@ namespace MVCLabb.Areas.User.Mapper
             };
         }
 
-        internal static DeletePhotoViewModels MapDeletePhotoViewModel(tbl_Photo model)
+        internal static DeletePhotoViewModels MapDeletePhotoViewModel(Photo model)
         {
             return new DeletePhotoViewModels
             {
@@ -73,7 +74,7 @@ namespace MVCLabb.Areas.User.Mapper
             };
         }
 
-        internal static CreatePhotoViewModels MapCreatePhotoViewModel(tbl_Photo photo)
+        internal static CreatePhotoViewModels MapCreatePhotoViewModel(Photo photo)
         {
             return new CreatePhotoViewModels
             {

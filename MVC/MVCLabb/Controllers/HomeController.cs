@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using MVCLabb.Mapper;
 using MVCLabb.Models;
 
@@ -11,6 +12,20 @@ namespace MVCLabb.Controllers
 {
     public class HomeController : Controller
     {
+        IUserRepository userRepository;
+        IPhotoRepository photoRepository;
+        IAlbumRepository albumRepository;
+        ICommentRepository commentRepository;
+
+        public HomeController()
+        {
+            userRepository = new UserRepository();
+            photoRepository = new PhotoRepository();
+            albumRepository = new AlbumRepository();
+            commentRepository = new CommentRepository();
+
+        }
+
         // GET: Home
         [AllowAnonymous]
         public ActionResult Index()
@@ -35,16 +50,16 @@ namespace MVCLabb.Controllers
 
             if (Filter == "photo")
             {
-                List<tbl_Photo> photosFromDB = PhotoBI.GetSearchPhotosFromDb(Search);
+                List<Photo> photosFromDB = photoRepository.GetSearchPhotosFromDb(Search);
                 List<IndexPhotoViewModel> photos = new List<IndexPhotoViewModel>();
                 photosFromDB.ForEach(x => photos.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
                 return PartialView("_thumbnails", photos);
             }
             else
             {
-                List<tbl_Album> albumsFromDB = AlbumBI.GetSearchAlbumsFromDB(Search);
+                List<Album> albumsFromDB = albumRepository.GetSearchAlbumsFromDB(Search);
                 List<AlbumViewModel> albums = new List<AlbumViewModel>();
-                albumsFromDB.ForEach(x => albums.Add(AlbumMapper.MapAlbumViewModel(x)));
+                albumsFromDB.ForEach(x => albums.Add(AlbumMapper.MapAlbumViewModel(x, photoRepository)));
                 return PartialView("_thumbnailsAlbum", albums);
             }
         }
@@ -53,14 +68,14 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult Data()
         {
-          
+
             var model = new DataViewModel()
             {
-                users = UserBI.GetAllUsers().Count().ToString(),
-                albums = AlbumBI.GettAllAlbums().Count().ToString(),
-                comments = CommentBI.GetAllComments().Count().ToString(),
-                photos = PhotoBI.GetAllPhotosFromDb().Count().ToString(),
-                latest = PhotoMapper.MapIndexPhotoViewModel(PhotoBI.GetLastAddedPhoto()).Path
+                users = userRepository.GetAllUsers().Count().ToString(),
+                albums = albumRepository.GettAllAlbums().Count().ToString(),
+                comments = commentRepository.GetAllComments().Count().ToString(),
+                photos = photoRepository.GetAllPhotosFromDb().Count().ToString(),
+                latest = PhotoMapper.MapIndexPhotoViewModel(photoRepository.GetLastAddedPhoto()).Path
             };
 
             return Json(model, JsonRequestBehavior.AllowGet);

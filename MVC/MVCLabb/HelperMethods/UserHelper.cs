@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MVCLabb.BI;
+using MVCLabb.Data;
+using MVCLabb.Data.Repository;
 using System.Security.Claims;
 
 namespace MVCLabb.HelperMethods
 {
     public static class UserHelper
     {
-        public static tbl_User GetLogedInUser()
+        public static User GetLogedInUser(IUserRepository UserBI)
         {
             var claims = HttpContext.Current.User.Identity as ClaimsIdentity;
 

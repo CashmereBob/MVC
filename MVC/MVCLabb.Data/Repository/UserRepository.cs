@@ -1,49 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
-using MVCLabb.Models;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MVCLabb.BI
+namespace MVCLabb.Data.Repository
 {
-    public static class UserBI
+    public class UserRepository : IUserRepository
     {
-        
-        internal static tbl_User ValidateLogin(string email, string password)
+        public void AddUser(User user)
         {
-            using (var dbCtx = new MVCLabbEntities())
-            {
-                foreach (var user in dbCtx.tbl_User)
-                {
-                    if (email == user.Email && UserBI.GenerateSHA256Hash(password, user.Salt) == user.Password)
-                    {
-                        return user;
-                    }
-                }
-            }
+            user.Salt = CreateSalt(10);
+            user.Password = GenerateSHA256Hash(user.Password, user.Salt);
 
-            return null;
-        }
-
-        internal static List<tbl_User> GetAllUsers()
-        {
             using (var ctx = new MVCLabbEntities())
             {
-                return ctx.tbl_User.Include("tbl_Photo").Include("tbl_Album").Include("tbl_Comment").ToList();
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
             }
         }
 
-        internal static tbl_User GetUser(string id)
-        {
-            using (var ctx = new MVCLabbEntities())
-            {
-                return ctx.tbl_User.Include("tbl_Photo").Include("tbl_Album").Include("tbl_Comment").FirstOrDefault(x => x.Id.ToString() == id);
-            }
-        }
-
-        public static string CreateSalt(int size) //Metod för att skapa salt, tar en inparameter som bestämmer längden på saltet.
+        public string CreateSalt(int size)
         {
             var rng = new System.Security.Cryptography.RNGCryptoServiceProvider(); //Skapar upp en ny "Random generator" från security namespase.
             var buff = new byte[size]; //Skapar upp en array med längden från inparametern.
@@ -51,7 +28,7 @@ namespace MVCLabb.BI
             return Convert.ToBase64String(buff); //Konverterar och returnerar det nu färdiga saltet.
         }
 
-        public static string GenerateSHA256Hash(string input, string salt) //Metod för att hasha lösenordet tillsammans med ett salt
+        public string GenerateSHA256Hash(string input, string salt)
         {
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input + salt); //Kodar om input tillsammans med saltet och lägger i en byte array
             var sha256hashstring = new System.Security.Cryptography.SHA256Managed(); //Skapar upp en SHA256 krypterare från namespacet security
@@ -60,23 +37,27 @@ namespace MVCLabb.BI
             return Convert.ToBase64String(hash); //Konverterar hashen till en string och returnerar.
         }
 
-        public static void AddUser(tbl_User user)
+        public List<User> GetAllUsers()
         {
-            user.Salt = CreateSalt(10);
-            user.Password = GenerateSHA256Hash(user.Password, user.Salt);
-
             using (var ctx = new MVCLabbEntities())
             {
-                ctx.tbl_User.Add(user);
-                ctx.SaveChanges();
+                return ctx.Users.Include("Photos").Include("Albums").Include("Comments").ToList();
             }
         }
 
-        internal static void UpdateUser(tbl_User user)
+        public User GetUser(string id)
         {
             using (var ctx = new MVCLabbEntities())
             {
-                tbl_User userFromDB = ctx.tbl_User.Where(x => x.Id == user.Id).FirstOrDefault();
+                return ctx.Users.Include("Photos").Include("Albums").Include("Comments").FirstOrDefault(x => x.Id.ToString() == id);
+            }
+        }
+
+        public void UpdateUser(User user)
+        {
+            using (var ctx = new MVCLabbEntities())
+            {
+                User userFromDB = ctx.Users.Where(x => x.Id == user.Id).FirstOrDefault();
                 userFromDB.Name = user.Name;
                 userFromDB.Country = user.Country;
                 userFromDB.Email = user.Email;
@@ -93,6 +74,22 @@ namespace MVCLabb.BI
 
                 ctx.SaveChanges();
             }
+        }
+
+        public User ValidateLogin(string email, string password)
+        {
+            using (var dbCtx = new MVCLabbEntities())
+            {
+                foreach (var user in dbCtx.Users)
+                {
+                    if (email == user.Email && GenerateSHA256Hash(password, user.Salt) == user.Password)
+                    {
+                        return user;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
