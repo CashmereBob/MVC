@@ -57,7 +57,7 @@ namespace MVCLabb.Controllers
             }
             else
             {
-                List<Album> albumsFromDB = albumRepository.GetSearchAlbumsFromDB(Search);
+                List<Album> albumsFromDB = albumRepository.GetSearchAlbumsFromDB(Search).Where(x => x.Photos.Count() > 0).ToList();
                 List<AlbumViewModel> albums = new List<AlbumViewModel>();
                 albumsFromDB.ForEach(x => albums.Add(AlbumMapper.MapAlbumViewModel(x, photoRepository)));
                 return PartialView("_thumbnailsAlbum", albums);

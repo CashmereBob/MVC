@@ -7,6 +7,7 @@ var albumButton = $("#albumButton");
 
 photoButton.addClass('active');
 SetLinksToDetail();
+
 albumButton.click(function (e) {
     partial = "album";
     albumButton.addClass('active');

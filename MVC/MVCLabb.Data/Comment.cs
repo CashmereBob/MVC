@@ -13,9 +13,9 @@ namespace MVCLabb.Data
         public DateTime Date { get; set; }
         public Guid UserID { get; set; }
         public virtual User User { get; set; }
-        public Guid PhotoID { get; set; }
+        public Guid? PhotoID { get; set; }
         public virtual Photo Photo { get; set; }
-        public Guid AlbumID { get; set; }
+        public Guid? AlbumID { get; set; }
         public virtual Album Album { get; set; }
     }
 }
