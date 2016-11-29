@@ -95,7 +95,7 @@ namespace MVCLabb
                 var albums = albumRepo.GettAllAlbums();
 
                 var photo = new Data.Photo {
-                    Path = " /Photos/marvel-ironman.png",
+                    Path = " /Photos/1.jpg",
                     Name = "Freegan asymmetrical",
                     Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                     Date = DateTime.Now,
@@ -106,7 +106,7 @@ namespace MVCLabb
 
                 photoRepo.AddPhotoToDB(new Data.Photo
                 {
-                    Path = " /Photos/img-54705803c114c-posts-9775.jpg",
+                    Path = " /Photos/2.jpg",
                     Name = "Freegan asymmetrical",
                     Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                     Date = DateTime.Now,
@@ -116,7 +116,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/URBAN.png",
+                Path = " /Photos/3.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -126,7 +126,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/MTI4NjQ2ODIyMDIwMjg5ODEw.jpg",
+                Path = " /Photos/4.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -136,7 +136,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/blogpost_Banner-img.jpg",
+                Path = " /Photos/5.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -146,7 +146,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/monkton dkb grain 1.png",
+                Path = " /Photos/6.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -156,7 +156,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/img-1.jpg",
+                Path = " /Photos/7.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -166,7 +166,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/&NCS_modified=20160831204930&MaxW=960&imageVersion=default&AR-160839797.jpg",
+                Path = " /Photos/8.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -176,7 +176,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/cnab.jpg",
+                Path = " /Photos/9.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -186,7 +186,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/lobuche-approach1.jpg",
+                Path = " /Photos/10.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -196,7 +196,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/multimedia-1436-img.jpg",
+                Path = " /Photos/11.png",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -206,7 +206,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/Knut_IMG_8095.jpg",
+                Path = " /Photos/12.png",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -216,7 +216,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/browmarker.jpg",
+                Path = " /Photos/13.png",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -226,7 +226,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/4237641-images.jpg",
+                Path = " /Photos/14.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -236,13 +236,23 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/Bonsai_IMG_6404.jpg",
+                Path = " /Photos/15.png",
                 Name = "Gentrify butcher selfies tacos",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
                 UserID = userID,
                 AlbumID = albums[3].Id
             });
+
+                photoRepo.AddPhotoToDB(new Data.Photo
+                {
+                    Path = " /Photos/16.jpg",
+                    Name = "Gentrify butcher selfies tacos",
+                    Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
+                    Date = DateTime.Now,
+                    UserID = userID,
+                    AlbumID = albums[3].Id
+                });
 
             }
 
