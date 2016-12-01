@@ -6,7 +6,7 @@
 
 <h2>Create Album</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Album", FormMethod.Post, new { id = "form", enctype = "multipart/form-data" })) 
 {
     @Html.AntiForgeryToken()
     
@@ -41,3 +41,41 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+@section Scripts {
+    <script>
+
+        var form = $('#form');
+
+
+        form.submit(function (e) {
+            e.preventDefault();
+
+            swal({
+                title: "Add album",
+                text: "Submit to add",
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/Album/Create",
+                    data: new FormData(form[0]),
+                    success: function (data) {
+                        swal("Sucsess", data + " created")
+                        form[0].reset();
+                    },
+                    error: function (e) {
+                        swal("Error!", "Something went wrong!", "error")
+                    },
+                    processData: false,
+                    contentType: false
+                });
+
+            });
+
+        });
+    </script>
+}

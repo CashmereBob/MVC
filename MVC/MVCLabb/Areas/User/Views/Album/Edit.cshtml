@@ -7,7 +7,7 @@
 
 <h2>Edit Album</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Album", FormMethod.Post, new { id = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -47,3 +47,42 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts {
+    <script>
+
+        var form = $('#form');
+
+        form.submit(function (e) {
+            e.preventDefault();
+
+            swal({
+                title: "Save!",
+                text: "Do you want to save edited changes?",
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/Album/Edit",
+                    data: new FormData(form[0]),
+                    success: function (data) {
+                        swal("Sucsess", data + " saved")
+                    },
+                    error: function (e) {
+                        swal("Error!", "Something went wrong!", "error")
+                    },
+                    processData: false,
+                    contentType: false
+                });
+
+            });
+
+        });
+    </script>
+}
+
+

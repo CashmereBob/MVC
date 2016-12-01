@@ -42,11 +42,11 @@ namespace MVCLabb
 
             userRepo.AddUser(new Data.User {
                 Admin = false,
-                Country = "nn",
+                Country = "Sverige",
                 Email = "user@user.com",
                 Password = "user",
                 Id = userID,
-                Name = "TestUser",
+                Name = "Mr. Test",
             });
 
             IAlbumRepository albumRepo = new AlbumRepository();
@@ -116,7 +116,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/3.jpg",
+                Path = " /Photos/12.png",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,
@@ -206,7 +206,7 @@ namespace MVCLabb
 
             photoRepo.AddPhotoToDB(new Data.Photo
             {
-                Path = " /Photos/12.png",
+                Path = " /Photos/3.jpg",
                 Name = "Freegan asymmetrical",
                 Description = "Freegan asymmetrical squid microdosing. Gentrify butcher selfies tacos, poke occupy mustache roof party brunch dreamcatcher glossier chicharrones green juice +1 semiotics. Kickstarter kinfolk sartorial narwhal, semiotics humblebrag brooklyn tumblr kale chips mumblecore.",
                 Date = DateTime.Now,

@@ -9,36 +9,93 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Photos)
-        </th>
-        <th></th>
-    </tr>
+<div id="content">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Photos)
+            </th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Photos)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Photos)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", null, new { id = item.Id, @class = "delete" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section Scripts {
+    <script>
+
+        function SetDelete() {
+
+        $('.delete').each(function () {
+
+            $(this).click(function (e) {
+                e.preventDefault();
+
+                var model = {
+                    Id: ""
+                };
+
+                model.Id = this.id;
+
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this Album!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/Album/Delete",
+                        data: JSON.stringify(model),
+                        success: function (data) {
+                            swal("Album is deleted", "success")
+                            $('#content').html(data);
+                            SetDelete();
+
+                        },
+                        error: function (e) {
+                            swal("Error!", "Something went wrong!", "error")
+                        },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "text"
+                    });
+
+                });
+
+            });
+
+        });
+        };
+
+        SetDelete();
+
+    </script>
 }
-
-</table>

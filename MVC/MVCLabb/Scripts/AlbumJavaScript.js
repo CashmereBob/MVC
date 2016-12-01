@@ -105,7 +105,10 @@ function LoadComent(id) {
 
     });
 
-    $("#submit").click(function (e) {
+    var form = $('#form');
+
+    form.submit(function (e) {
+        e.preventDefault();
 
         var comm = {
             id: "",
@@ -124,7 +127,9 @@ function LoadComent(id) {
                 success: function (data) {
                     $("#inputField").show();
                     app.comments = data;
-                    console.log(data.id);
+                    swal("Comment posted")
+                    form[0].reset();
+                    app2.comments = data;
                     $("#actualComment").val("");
                 },
                 contentType: "application/json; charset=utf-8",

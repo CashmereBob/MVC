@@ -99,7 +99,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult AlbumComments(string id)
         {
-            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id);
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id).OrderBy(x => x.Date).ToList();
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -126,7 +126,7 @@ namespace MVCLabb.Controllers
 
             commentRepository.AddComment(comm);
 
-            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString());
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString()).OrderBy(x => x.Date).ToList();
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -141,7 +141,7 @@ namespace MVCLabb.Controllers
         [AllowAnonymous]
         public ActionResult PhotoComments(string id)
         {
-            List<Comment> comments = commentRepository.GetAllComentsByPhotoID(id);
+            List<Comment> comments = commentRepository.GetAllComentsByPhotoID(id).OrderBy(x => x.Date).ToList();
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 
@@ -169,7 +169,7 @@ namespace MVCLabb.Controllers
 
             commentRepository.AddComment(comm);
 
-            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString());
+            List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString()).OrderBy(x => x.Date).ToList();
             List<CommentViewModel> model = new List<CommentViewModel>();
             comments.ForEach(x => model.Add(CommentMapper.MapCommentViewModel(x)));
 

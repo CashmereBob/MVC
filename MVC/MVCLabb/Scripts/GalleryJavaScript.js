@@ -119,7 +119,10 @@ function LoadComentPhoto(id) {
 
 
 
-    $("#submit").click(function (e) {
+        var form = $('#form');
+
+        form.submit(function (e) {
+            e.preventDefault();
 
         var comm = {
             id: "",
@@ -137,6 +140,9 @@ function LoadComentPhoto(id) {
                 data: JSON.stringify(comm),
                 success: function (data) {
                     $("#inputField").show();
+                    app2.comments = data;
+                    swal("Comment posted")
+                    form[0].reset();
                     app2.comments = data;
                     
                     $.ajax({

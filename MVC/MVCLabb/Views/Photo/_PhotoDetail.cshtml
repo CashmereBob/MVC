@@ -13,12 +13,18 @@
 
         <h2>Comments</h2>
         @if (User.Identity.IsAuthenticated)
-        {
-            <textarea id="actualComment" name="comment" class="form-control" style="width: 100%;" rows="5" required></textarea>
-                    <button id="submit" class="btn btn-default">Submit</button>
+            {
+                using (Html.BeginForm("PhotoComments", "Photo", FormMethod.Post, new { id = "form", enctype = "multipart/form-data" }))
+                {
+                    Html.AntiForgeryToken();
+                <textarea id="actualComment" name="comment" class="form-control" style="width: 100%;" rows="5" required></textarea>
+                <input type="submit" value="Create" class="btn btn-default" />
+              
+                
+            }
         }
         <hr />
-        
+
         <ol id="list" style="padding: 0; margin: 0; list-style-type: none;">
             <li v-for="commentn in comments">
                 <h3>{{ commentn.name }}</h3>
@@ -30,3 +36,4 @@
 
     </div>
 </div>
+

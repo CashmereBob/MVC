@@ -71,7 +71,20 @@ namespace MVCLabb.Areas.User.Controllers
 
             commentRepository.DeleteComment(comment);
 
-            return RedirectToAction("Index", new { id=comment.PhotoID });
+            Guid id;
+            List<CommentViewModel> models = new List<CommentViewModel>();
+            if (comment.AlbumID == null ) {
+                id = (Guid)comment.PhotoID;
+                List<Comment> comments = commentRepository.GetAllComentsByPhotoID(id.ToString());
+                comments.ForEach(x => models.Add(CommentMapper.MapCommentViewModel(x)));
+            } else
+            {
+                id = (Guid)comment.AlbumID;
+                List<Comment> comments = commentRepository.GetAllComentsByAlbumID(id.ToString());
+                comments.ForEach(x => models.Add(CommentMapper.MapCommentViewModel(x)));
+            }
+
+            return PartialView("_Items", models);
 
         }
     }

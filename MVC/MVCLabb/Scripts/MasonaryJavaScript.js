@@ -1,4 +1,8 @@
-﻿$(window).load(function () {
+﻿$(window).on('load', function () {
+    whileOverfloed();
+});
+
+$(document).resize(function () {
     whileOverfloed();
 });
 
@@ -6,7 +10,14 @@ $(window).resize(function () {
     whileOverfloed();
 });
 
+
+$(document).ready(function () {
+    whileOverfloed();
+});
+
+
 var container = $('#masonarycontainer');
+
 
 function isOverflowed() {
     

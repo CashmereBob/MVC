@@ -54,7 +54,7 @@ namespace MVCLabb.Areas.User.Controllers
                 albumRepository.AddAlbum(album);
                
             }
-            return RedirectToAction("Index");
+            return Content(model.Name);
         }
 
         [HttpGet]
@@ -83,7 +83,7 @@ namespace MVCLabb.Areas.User.Controllers
                 albumRepository.UpdateAlbum(album);
                 
             }
-            return RedirectToAction("Index");
+            return Content(model.Name);
         }
 
         [HttpGet]
@@ -106,7 +106,12 @@ namespace MVCLabb.Areas.User.Controllers
         {
             Album album = AlbumMapper.MapEditAlbumViewModel(model, userID);
             albumRepository.DeleteAlbum(album);
-            return RedirectToAction("Index");
+
+            List<Album> albumsDB = albumRepository.GettAllAlbumsByUserID(userID);
+            List<ListAlbumViewModel> albums = new List<ListAlbumViewModel>();
+            albumsDB.ForEach(x => albums.Add(AlbumMapper.MapListAlbumViewModel(x)));
+
+            return PartialView("_Items", albums);
         }
     }
 }

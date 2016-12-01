@@ -67,7 +67,7 @@ namespace MVCLabb.Areas.User.Controllers
                 photoRepository.AddPhotoToDB(photoToDB);
 
                 photoUpload.SaveAs(Path.Combine(Server.MapPath("~/Photos"), photoUpload.FileName));
-                return RedirectToAction("Index");
+                return Content(photoUpload.FileName);
             }
             catch
             {
@@ -76,7 +76,7 @@ namespace MVCLabb.Areas.User.Controllers
                 model.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
                 albums.ForEach(x => model.Albums.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() }));
 
-                return View(model);
+                return Content(photoUpload.FileName);
             }
         }
 
@@ -85,8 +85,9 @@ namespace MVCLabb.Areas.User.Controllers
         {
             Photo model = photoRepository.GetPhotoFromDbById(photo.Id);
             photo = PhotoMapper.MapEditPhotoViewModel(model);
+            photo.AlbumId = model.AlbumID != null ? (Guid)model.AlbumID : Guid.Empty;
             var albums = albumRepository.GettAllAlbumsByUserID(userID);
-            photo.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = "" });
+            photo.Albums.Add(new SelectListItem { Text = "Uncategorized", Value = Guid.Empty.ToString() });
             albums.ForEach(x => photo.Albums.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() }));
 
             if (model.UserID == userID)
@@ -105,11 +106,11 @@ namespace MVCLabb.Areas.User.Controllers
             try
             {
                 photoRepository.UdaptePhoto(model);
-                return RedirectToAction("Index");
+                return Content(photo.Name);
             }
             catch
             {
-                return View();
+                return Content("Error");
             }
         }
 
@@ -131,30 +132,36 @@ namespace MVCLabb.Areas.User.Controllers
 
         // POST: User/Edit/Delete/5
         [HttpPost]
-        public ActionResult Delete(DeletePhotoViewModels photo, FormCollection collection)
+        public ActionResult Delete(string Id)
         {
+            
             try
             {
-                Photo model = photoRepository.GetPhotoFromDbById(photo.Id);
+                Photo model = photoRepository.GetPhotoFromDbById(new Guid(Id));
                 if (model.UserID == userID)
                 {
-                photoRepository.DeletePhotoFromDB(model);
+                    photoRepository.DeletePhotoFromDB(model);
 
-                string fullPath = Request.MapPath(model.Path);
+                    string fullPath = Request.MapPath(model.Path);
 
-                if (System.IO.File.Exists(fullPath))
-                {
-                    System.IO.File.Delete(fullPath);
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+
                 }
-
-                return RedirectToAction("Index");
-                }
-                return View();
+                
             }
             catch
             {
-                return View();
+                
             }
+            List<Photo> photosFromDB = photoRepository.GetPhotoFromDbByUserId(userID);
+            ICollection<IndexPhotoViewModels> models = new List<IndexPhotoViewModels>();
+            photosFromDB.ForEach(x => models.Add(PhotoMapper.MapIndexPhotoViewModel(x)));
+
+
+            return PartialView("_Images", models);
         }
 
     

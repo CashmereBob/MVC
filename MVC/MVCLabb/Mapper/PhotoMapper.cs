@@ -27,7 +27,7 @@ namespace MVCLabb.Mapper
                 id = x.Id,
                 email = x.User.Email,
                 name = x.User.Name,
-                date = x.Date,
+                date = x.Date.ToString(),
                 comment = x.Content
             }));
 
@@ -65,7 +65,7 @@ namespace MVCLabb.Mapper
             photoView.Comments.ToList().ForEach(x => 
             photo.Comments.Add(new Comment {
                 Content = x.comment,
-                Date = x.date,
+                Date = DateTime.Parse(x.date),
                 UserID = x.userID
             }));
 

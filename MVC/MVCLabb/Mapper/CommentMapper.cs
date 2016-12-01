@@ -16,7 +16,7 @@ namespace MVCLabb.Mapper
             {
                 id = comment.Id,
                 comment = comment.Content,
-                date = comment.Date,
+                date = comment.Date.ToString(),
                 email = comment.User.Email,
                 name = comment.User.Name
             };
@@ -28,7 +28,7 @@ namespace MVCLabb.Mapper
             {
                 Id = comment.id,
                 Content = comment.comment,
-                Date = comment.date,
+                Date = DateTime.Parse(comment.date),
                 UserID = comment.userID
             };
         }

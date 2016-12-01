@@ -6,36 +6,93 @@
 }
 
 <h2>Comments</h2>
+<div id="content">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment)
+            </th>
+            <th></th>
+        </tr>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.comment)
-        </th>
-        <th></th>
-    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.comment)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", null, new { id = item.id, @class = "delete" })
+                </td>
+            </tr>
+        }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.comment)
-        </td>
-        <td>
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+
+        function SetDelete() {
+
+        $('.delete').each(function () {
+
+            $(this).click(function (e) {
+                e.preventDefault();
+
+                var model = {
+                    Id: ""
+                };
+
+                model.Id = this.id;
+
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this comment !",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/Comment/Delete",
+                        data: JSON.stringify(model),
+                        success: function (data) {
+                            swal("Coment is deleted", "success")
+                            $('#content').html(data);
+                            SetDelete();
+
+                        },
+                        error: function (e) {
+                            swal("Error!", "Something went wrong!", "error")
+                        },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "text"
+                    });
+
+                });
+
+            });
+
+        });
+        };
+
+        SetDelete();
+
+    </script>
 }
-
-</table>
